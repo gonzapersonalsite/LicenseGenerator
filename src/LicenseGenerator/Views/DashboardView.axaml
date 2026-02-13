@@ -38,6 +38,22 @@
             </Border>
         </UniformGrid>
 
+        <!-- Active vs expired summary -->
+        <StackPanel Orientation="Horizontal" Spacing="20" Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+                <TextBlock Text="{DynamicResource DashboardActiveLabel}" FontSize="{DynamicResource FontSizeSmall}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                <TextBlock Text="{Binding ActiveLicenses}" FontSize="{DynamicResource FontSizeSmall}" FontWeight="SemiBold"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="6">
+                <TextBlock Text="{DynamicResource DashboardExpiredLabel}" FontSize="{DynamicResource FontSizeSmall}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                <TextBlock Text="{Binding ExpiredLicenses}" FontSize="{DynamicResource FontSizeSmall}" FontWeight="SemiBold"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="6">
+                <TextBlock Text="{DynamicResource DashboardPercentageLabel}" FontSize="{DynamicResource FontSizeSmall}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                <TextBlock Text="{Binding ActivePercentage, StringFormat={}{0}%}" FontSize="{DynamicResource FontSizeSmall}" FontWeight="SemiBold"/>
+            </StackPanel>
+        </StackPanel>
+
         <Border Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" Padding="20" CornerRadius="8">
             <StackPanel Spacing="10">
                 <TextBlock Text="{DynamicResource DashboardQuestion}" FontWeight="Bold" FontSize="{DynamicResource FontSizeLarge}"/>

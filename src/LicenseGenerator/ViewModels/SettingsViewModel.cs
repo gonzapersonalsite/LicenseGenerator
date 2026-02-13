@@ -71,15 +71,26 @@ public partial class SettingsViewModel : ViewModelBase
         FontSizes.Add(new SettingsOption<double>(1.5, "LangFontSizeExtraLarge"));
 
         Languages.Clear();
-        Languages.Add(new SettingsOption<string>("es-ES", "LangSpanish"));
-        Languages.Add(new SettingsOption<string>("en-US", "LangEnglish"));
+        foreach (var langCode in _languageService.AvailableLanguages)
+        {
+            string labelKey = langCode switch
+            {
+                "es-ES" => "LangSpanish",
+                "en-US" => "LangEnglish",
+                "de-DE" => "LangGerman",
+                _ => langCode // Fallback to the code itself for new languages
+            };
+            Languages.Add(new SettingsOption<string>(langCode, labelKey));
+        }
     }
 
     private void LoadCurrentSettings()
     {
         SelectedTheme = Themes.FirstOrDefault(t => t.Value == _settingsService.AppTheme) ?? Themes[1]; // Default Dark
         SelectedFontSize = FontSizes.FirstOrDefault(f => f.Value == _settingsService.FontSizeScaling) ?? FontSizes[1]; // Default 1.0
-        SelectedLanguage = Languages.FirstOrDefault(l => l.Value == _settingsService.CurrentLanguage) ?? Languages[0]; // Default es-ES
+        
+        // Match the language from service (which already handled system/saved logic)
+        SelectedLanguage = Languages.FirstOrDefault(l => l.Value == _languageService.CurrentLanguage) ?? Languages.FirstOrDefault();
     }
 
     partial void OnSelectedThemeChanged(SettingsOption<string> value)

@@ -9,7 +9,7 @@ public class SettingsService : ISettingsService
     private readonly string _settingsFilePath;
     private string _appTheme = "System"; // Default to System
     private double _fontSizeScaling = 1.0;
-    private string _currentLanguage = "es-ES";
+    private string _currentLanguage = string.Empty; // Empty means "not set, use system"
 
     public string AppTheme
     {
@@ -79,7 +79,7 @@ public class SettingsService : ISettingsService
                 }
                 if (data.TryGetProperty("CurrentLanguage", out var langProperty))
                 {
-                    _currentLanguage = langProperty.GetString() ?? "es-ES";
+                    _currentLanguage = langProperty.GetString() ?? string.Empty;
                 }
             }
         }
@@ -90,7 +90,7 @@ public class SettingsService : ISettingsService
     {
         _appTheme = "System";
         _fontSizeScaling = 1.0;
-        _currentLanguage = "es-ES";
+        _currentLanguage = string.Empty;
         Save();
     }
 }

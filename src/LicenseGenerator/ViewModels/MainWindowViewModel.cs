@@ -20,6 +20,8 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly IServiceProvider _serviceProvider;
     
+    public static MainWindowViewModel? Instance { get; private set; }
+
     [ObservableProperty]
     private ILanguageService _languageService;
 
@@ -39,6 +41,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
+        Instance = this;
         _languageService = _serviceProvider.GetRequiredService<ILanguageService>();
         NotificationService = _serviceProvider.GetRequiredService<INotificationService>();
 
@@ -110,7 +113,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
-    private void NavigateTo(NavigationItem item)
+    public void NavigateTo(NavigationItem item)
     {
         if (item.ViewModelType == null) return;
 
@@ -125,5 +128,25 @@ public partial class MainWindowViewModel : ViewModelBase
     public void TogglePane()
     {
         IsPaneOpen = !IsPaneOpen;
+    }
+
+    [RelayCommand]
+    public void NavigateToApps()
+    {
+        var item = MenuItems.FirstOrDefault(i => i.ViewModelType == typeof(AppsViewModel));
+        if (item != null)
+        {
+            NavigateTo(item);
+        }
+    }
+
+    [RelayCommand]
+    public void NavigateToHistory()
+    {
+        var item = MenuItems.FirstOrDefault(i => i.ViewModelType == typeof(HistoryViewModel));
+        if (item != null)
+        {
+            NavigateTo(item);
+        }
     }
 }
