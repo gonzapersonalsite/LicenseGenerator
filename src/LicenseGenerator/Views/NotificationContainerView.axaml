@@ -1,0 +1,74 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:LicenseGenerator.ViewModels"
+             xmlns:services="using:LicenseGenerator.Services"
+             xmlns:cv="using:LicenseGenerator.Converters"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+             x:Class="LicenseGenerator.Views.NotificationContainerView"
+             x:DataType="services:INotificationService">
+    
+    <UserControl.Resources>
+        <cv:NotificationTypeToBrushConverter x:Key="TypeToBrushConverter"/>
+        <cv:NotificationTypeToIconConverter x:Key="TypeToIconConverter"/>
+    </UserControl.Resources>
+
+    <ItemsControl ItemsSource="{Binding Notifications}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Spacing="10" VerticalAlignment="Top"/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        
+        <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="vm:NotificationViewModel">
+                <Border CornerRadius="6" 
+                        BoxShadow="0 4 10 0 #40000000" 
+                        Margin="0,0,20,10"
+                        Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                        Width="320"
+                        HorizontalAlignment="Right">
+                    <Grid ColumnDefinitions="6, Auto, *, Auto">
+                        <!-- Accent Strip -->
+                        <Rectangle Grid.Column="0" Fill="{Binding Type, Converter={StaticResource TypeToBrushConverter}}"
+                                   VerticalAlignment="Stretch"
+                                   RadiusX="6" RadiusY="6"/>
+                        <!-- Cover left radius of rectangle to make it look like a strip -->
+                         <Rectangle Grid.Column="0" Fill="{Binding Type, Converter={StaticResource TypeToBrushConverter}}"
+                                   VerticalAlignment="Stretch"
+                                   Margin="3,0,0,0"/>
+
+                        <!-- Icon -->
+                        <PathIcon Grid.Column="1" 
+                                  Data="{Binding Type, Converter={StaticResource TypeToIconConverter}}"
+                                  Foreground="{Binding Type, Converter={StaticResource TypeToBrushConverter}}"
+                                  Width="20" Height="20"
+                                  Margin="12,12,8,12"
+                                  VerticalAlignment="Top"/>
+                        
+                        <!-- Content -->
+                        <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="0,12,0,12">
+                            <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="{DynamicResource FontSizeNormal}" TextWrapping="Wrap" Margin="0,0,0,2"/>
+                            <TextBlock Text="{Binding Message}" FontSize="{DynamicResource FontSizeSmall}" TextWrapping="Wrap" Opacity="0.8"/>
+                        </StackPanel>
+                        
+                        <!-- Close Button -->
+                        <Button Grid.Column="3" 
+                                Command="{Binding CloseCommand}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="8"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Right"
+                                Margin="0,2,2,0"
+                                Cursor="Hand">
+                            <PathIcon Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+                                      Width="10" Height="10" Opacity="0.6"/>
+                        </Button>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>

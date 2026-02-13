@@ -1,0 +1,111 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:LicenseGenerator.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="using:LicenseGenerator.Views.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LicenseGenerator.Views.AppsView"
+             x:DataType="vm:AppsViewModel">
+    <Grid RowDefinitions="Auto, Auto, Auto, *">
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Text="{DynamicResource AppsViewTitle}" FontSize="{DynamicResource FontSizeExtraLarge}" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <!-- Add App Input -->
+        <Border Grid.Row="1" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" Padding="15" CornerRadius="8" Margin="0,0,0,20">
+            <StackPanel Spacing="10">
+                <TextBlock Text="{DynamicResource AppsCreateSection}" FontWeight="Bold"/>
+                <Grid ColumnDefinitions="*, Auto">
+                    <TextBox Grid.Column="0" 
+                              Text="{Binding NewAppId}" 
+                              Watermark="{DynamicResource ManageAppsPlaceholder}" 
+                              Margin="0,0,10,0"/>
+                    <Button Grid.Column="1" 
+                             Command="{Binding CreateAppCommand}" 
+                             Content="{DynamicResource ManageAppsCreateBtn}" 
+                             Classes="Primary"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- Search Bar -->
+        <controls:SearchBar Grid.Row="2" 
+                            SearchText="{Binding SearchText, Mode=TwoWay}"
+                            Watermark="{DynamicResource AppsSearchPlaceholder}"
+                            Margin="0,0,0,10"/>
+
+        <!-- Apps List -->
+        <Border Grid.Row="3" Background="{DynamicResource SystemControlBackgroundAltHighBrush}" BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}" BorderThickness="1" CornerRadius="8">
+            <controls:PaginatedList CurrentPage="{Binding CurrentPage, Mode=TwoWay}"
+                                    TotalCount="{Binding TotalCount}"
+                                    PageSize="{Binding PageSize, Mode=TwoWay}"
+                                    NextPageCommand="{Binding NextPageCommand}"
+                                    PreviousPageCommand="{Binding PreviousPageCommand}">
+                <Grid RowDefinitions="Auto, *">
+                    <Border Grid.Row="0" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" Padding="10">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Text="{DynamicResource AppsIdHeader}" FontWeight="Bold"/>
+                            <TextBlock Grid.Column="1" Text="{DynamicResource AppsActionHeader}" FontWeight="Bold" Margin="0,0,20,0"/>
+                        </Grid>
+                    </Border>
+
+                    <ScrollViewer Grid.Row="1">
+                        <ItemsControl ItemsSource="{Binding FilteredApps}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:AppItemInfo">
+                                    <Border BorderBrush="#EEEEEE" BorderThickness="0,0,0,1" Padding="10">
+                                        <Grid ColumnDefinitions="*, Auto">
+                                            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                                <PathIcon Data="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z" 
+                                                          Width="16" Height="16" Opacity="0.5"/>
+                                                <TextBlock Text="{Binding DisplayText}" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                                            </StackPanel>
+                                            
+                                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                                                <Button Content="{DynamicResource CommonDelete}" 
+                                                        Command="{Binding $parent[UserControl].((vm:AppsViewModel)DataContext).DeleteAppCommand}"
+                                                        CommandParameter="{Binding Name}"
+                                                        Classes="Danger"
+                                                        FontSize="{DynamicResource FontSizeSmall}" Padding="8,2"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </controls:PaginatedList>
+        </Border>
+
+        <!-- Confirmation Overlay -->
+        <Grid Grid.Row="0" Grid.RowSpan="4" 
+              Background="#AA000000" 
+              IsVisible="{Binding IsConfirmDeleteOpen}"
+              ZIndex="100">
+            <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                    BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8" 
+                    Padding="30" 
+                    Width="400" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center"
+                    BoxShadow="0 10 20 0 #66000000">
+                <StackPanel Spacing="20">
+                    <TextBlock Text="{DynamicResource AppsDeleteConfirmTitle}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center">
+                        <Run Text="{DynamicResource AppsDeleteConfirmMsg}"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding AppToDelete}" FontWeight="SemiBold"/>
+                        <Run Text="?"/>
+                    </TextBlock>
+                    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                        <Button Content="{DynamicResource CommonCancel}" Command="{Binding CancelDeleteCommand}" Width="120" HorizontalContentAlignment="Center"/>
+                        <Button Content="{DynamicResource CommonConfirm}" Command="{Binding ConfirmDeleteCommand}" Classes="Danger" Width="120" HorizontalContentAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

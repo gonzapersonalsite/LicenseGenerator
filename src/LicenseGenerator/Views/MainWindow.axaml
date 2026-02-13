@@ -1,0 +1,147 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:LicenseGenerator.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="using:LicenseGenerator.Converters"
+        xmlns:views="using:LicenseGenerator.Views"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="650"
+        x:Class="LicenseGenerator.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/app.ico"
+        Title="License Generator"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <converters:ResourceKeyToGeometryConverter x:Key="ResourceKeyToGeometryConverter"/>
+        <converters:LocalizationConverter x:Key="LocalizationConverter"/>
+    </Window.Resources>
+
+    <Window.Styles>
+        <Style Selector="ListBoxItem" x:DataType="vm:NavigationItem">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="IsHitTestVisible" Value="{Binding !IsHeader}"/>
+            <Setter Property="Focusable" Value="{Binding !IsHeader}"/>
+        </Style>
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundAccentBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid>
+        <SplitView DisplayMode="CompactInline"
+                   IsPaneOpen="{Binding IsPaneOpen}"
+                   OpenPaneLength="250"
+                   CompactPaneLength="48"
+                   PaneBackground="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+            
+            <SplitView.Pane>
+                <Grid RowDefinitions="Auto, *">
+                    
+                    <!-- Toggle / Brand -->
+                    <Grid ColumnDefinitions="48, *" Height="52">
+                         <Button Grid.Column="0"
+                                 Command="{Binding TogglePaneCommand}" 
+                                 Width="32" Height="32"
+                                 Background="Transparent"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center">
+                            <PathIcon Data="{StaticResource LineHorizontal3Regular}"/>
+                         </Button>
+                         
+                         <TextBlock Grid.Column="1" 
+                                    Text="License Generator" 
+                                    FontWeight="Bold" 
+                                    FontSize="{DynamicResource FontSizeMedium}"
+                                    VerticalAlignment="Center"
+                                    Margin="5,0,0,0"
+                                    TextTrimming="CharacterEllipsis"
+                                    TextWrapping="NoWrap"
+                                    IsVisible="{Binding IsPaneOpen}"/>
+                    </Grid>
+
+                    <!-- Main Navigation -->
+                    <ListBox Grid.Row="1" 
+                             ItemsSource="{Binding MenuItems}" 
+                             SelectedItem="{Binding SelectedMainItem}"
+                             Background="Transparent">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="vm:NavigationItem">
+                                <Panel>
+                                    <!-- Headers: Text visible when open, separator line when collapsed -->
+                                    <Panel IsVisible="{Binding IsHeader}">
+                                        <TextBlock IsVisible="{Binding $parent[SplitView].IsPaneOpen}"
+                                                   FontSize="{DynamicResource FontSizeSmall}"
+                                                   FontWeight="Bold"
+                                                   Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                                   Margin="10,15,0,5"
+                                                   TextWrapping="NoWrap">
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource LocalizationConverter}">
+                                                    <Binding Path="Label"/>
+                                                    <Binding Path="((vm:MainWindowViewModel)DataContext).LanguageService.CurrentLanguage" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <!-- Thin separator visible only when pane is collapsed -->
+                                        <Separator IsVisible="{Binding !$parent[SplitView].IsPaneOpen}"
+                                                   Height="1"
+                                                   Background="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                                   Opacity="0.3"
+                                                   Margin="8,10"/>
+                                    </Panel>
+
+                                    <!-- Navigation Items: Visible if NOT a header -->
+                                    <Grid IsVisible="{Binding !IsHeader}" ColumnDefinitions="48, *" MinHeight="40">
+                                        <ToolTip.Tip>
+                                            <MultiBinding Converter="{StaticResource LocalizationConverter}">
+                                                <Binding Path="Label"/>
+                                                <Binding Path="((vm:MainWindowViewModel)DataContext).LanguageService.CurrentLanguage" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                            </MultiBinding>
+                                        </ToolTip.Tip>
+                                        
+                                        <!-- Icon: Always visible in Column 0 (48px) -->
+                                        <PathIcon Grid.Column="0" 
+                                                  Data="{Binding IconKey, Converter={StaticResource ResourceKeyToGeometryConverter}}" 
+                                                  Width="20" Height="20" 
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                                        
+                                        <!-- Label: Only visible if pane is open -->
+                                        <TextBlock Grid.Column="1" VerticalAlignment="Center" 
+                                                   IsVisible="{Binding $parent[SplitView].IsPaneOpen}"
+                                                   Margin="5,0,0,0"
+                                                   TextWrapping="NoWrap">
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource LocalizationConverter}">
+                                                    <Binding Path="Label"/>
+                                                    <Binding Path="((vm:MainWindowViewModel)DataContext).LanguageService.CurrentLanguage" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Grid>
+                                </Panel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </SplitView.Pane>
+
+            <SplitView.Content>
+                 <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" Padding="20">
+                     <TransitioningContentControl Content="{Binding CurrentPage}"/>
+                 </Border>
+            </SplitView.Content>
+        </SplitView>
+
+        <!-- Global Notifications Overlay -->
+        <views:NotificationContainerView DataContext="{Binding NotificationService}"
+                                        VerticalAlignment="Top" 
+                                        HorizontalAlignment="Right"
+                                        Margin="0,20,20,0"
+                                        ZIndex="1000"/>
+    </Grid>
+</Window>

@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:LicenseGenerator.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LicenseGenerator.Views.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+    <StackPanel Spacing="30" Margin="20">
+        <StackPanel Spacing="5">
+            <TextBlock Text="{DynamicResource DashboardTitle}" FontSize="{DynamicResource FontSizeHuge}" FontWeight="Bold"/>
+            <TextBlock Text="{DynamicResource DashboardSubtitle}" FontSize="{DynamicResource FontSizeNormal}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+        </StackPanel>
+
+        <UniformGrid Columns="3" Margin="0,20">
+            <!-- Stats Card 1 -->
+            <Border Background="#3498DB" Padding="20" CornerRadius="8" Margin="0,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource DashboardTotalAppsLabel}" Foreground="White" FontSize="{DynamicResource FontSizeNormal}"/>
+                    <TextBlock Text="{Binding TotalApps}" Foreground="White" FontSize="{DynamicResource FontSizeExtraHuge}" FontWeight="Bold"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Stats Card 2 -->
+            <Border Background="#27AE60" Padding="20" CornerRadius="8" Margin="10,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource DashboardTotalLicensesLabel}" Foreground="White" FontSize="{DynamicResource FontSizeNormal}"/>
+                    <TextBlock Text="{Binding TotalLicenses}" Foreground="White" FontSize="{DynamicResource FontSizeExtraHuge}" FontWeight="Bold"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Stats Card 3 -->
+            <Border Background="#9B59B6" Padding="20" CornerRadius="8" Margin="10,0,0,0">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource DashboardLastLicenseLabel}" Foreground="White" FontSize="{DynamicResource FontSizeNormal}"/>
+                    <TextBlock Text="{Binding LastLicenseApp}" Foreground="White" FontSize="{DynamicResource FontSizeLarge}" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,10,0,0"/>
+                </StackPanel>
+            </Border>
+        </UniformGrid>
+
+        <Border Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" Padding="20" CornerRadius="8">
+            <StackPanel Spacing="10">
+                <TextBlock Text="{DynamicResource DashboardQuestion}" FontWeight="Bold" FontSize="{DynamicResource FontSizeLarge}"/>
+                <TextBlock Text="{DynamicResource DashboardActionHint}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

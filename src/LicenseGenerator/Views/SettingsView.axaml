@@ -1,0 +1,231 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:LicenseGenerator.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="using:LicenseGenerator.Converters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LicenseGenerator.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+    
+    <UserControl.Resources>
+        <converters:LocalizationConverter x:Key="LocalizationConverter"/>
+    </UserControl.Resources>
+    
+    <Grid RowDefinitions="Auto, *, Auto">
+        <TextBlock Grid.Row="0" Text="{DynamicResource NavSettings}" FontSize="{DynamicResource FontSizeExtraLarge}" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="20">
+                <!-- Theme Settings -->
+                <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" 
+                        BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}" 
+                        BorderThickness="1" 
+                        CornerRadius="8"
+                        Padding="20">
+                    <StackPanel Spacing="15">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="M21 12.35c0 5.31-4.32 9.62-9.62 9.62-5.3 0-9.62-4.31-9.62-9.62h1.54C3.3 17.14 7.21 21.05 12 21.05s8.7-3.91 8.7-8.7c0-2.43-.99-4.62-2.58-6.19l1.09-1.09C20.84 6.78 22 9.4 22 12.35zM12.35 1c-5.31 0-9.62 4.31-9.62 9.62h1.54c0-4.64 3.77-8.41 8.41-8.41 2.37 0 4.51.98 6.05 2.56l1.09-1.09C18.17 2.15 15.39 1 12.35 1z" 
+                                      Width="20" Height="20" Opacity="0.7"/>
+                            <TextBlock Text="{DynamicResource SettingsAppearance}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        
+                        <TextBlock Text="{DynamicResource SettingsDescription}" 
+                                   Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                   FontSize="{DynamicResource FontSizeSmall}"/>
+
+                        <Separator Height="1" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" Margin="0,5"/>
+
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Text="{DynamicResource SettingsTheme}" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" 
+                                      ItemsSource="{Binding Themes}" 
+                                      SelectedItem="{Binding SelectedTheme}"
+                                      Width="180">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource LocalizationConverter}">
+                                                    <Binding Path="DisplayKey"/>
+                                                    <Binding Path="((vm:SettingsViewModel)DataContext).LanguageService.CurrentLanguage" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Text="{DynamicResource SettingsFontSize}" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" 
+                                      ItemsSource="{Binding FontSizes}" 
+                                      SelectedItem="{Binding SelectedFontSize}"
+                                      Width="180">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource LocalizationConverter}">
+                                                    <Binding Path="DisplayKey"/>
+                                                    <Binding Path="((vm:SettingsViewModel)DataContext).LanguageService.CurrentLanguage" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Text="{DynamicResource SettingsLanguage}" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" 
+                                      ItemsSource="{Binding Languages}" 
+                                      SelectedItem="{Binding SelectedLanguage}"
+                                      Width="180">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource LocalizationConverter}">
+                                                    <Binding Path="DisplayKey"/>
+                                                    <Binding Path="((vm:SettingsViewModel)DataContext).LanguageService.CurrentLanguage" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Information Section -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" 
+                        CornerRadius="8"
+                        Padding="20">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="{DynamicResource SettingsInfoTitle}" FontWeight="SemiBold"/>
+                        <TextBlock Text="{DynamicResource SettingsInfoContent}" 
+                                   TextWrapping="Wrap" FontSize="{DynamicResource FontSizeSmall}" Opacity="0.8"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Data Management Section -->
+                <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" 
+                        BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}" 
+                        BorderThickness="1" 
+                        CornerRadius="8"
+                        Padding="20">
+                    <StackPanel Spacing="15">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" 
+                                      Width="20" Height="20" Opacity="0.7"/>
+                            <TextBlock Text="{DynamicResource Backup.Title}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Separator Height="1" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" Margin="0,5"/>
+
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Text="{DynamicResource Backup.Export}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,10,0"/>
+                            <Button Grid.Column="1" 
+                                    Content="{DynamicResource CommonExport}" 
+                                    Command="{Binding ExportDataCommand}"
+                                    MinWidth="150"
+                                    HorizontalContentAlignment="Center"/>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Text="{DynamicResource Backup.Import}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,10,0"/>
+                            <Button Grid.Column="1" 
+                                    Content="{DynamicResource CommonImport}" 
+                                    Command="{Binding ShowImportConfirmCommand}"
+                                    MinWidth="150"
+                                    HorizontalContentAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Reset Section -->
+                <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" 
+                        BorderBrush="{DynamicResource ColorDanger}" 
+                        BorderThickness="1" 
+                        CornerRadius="8"
+                        Padding="20">
+                    <Grid ColumnDefinitions="*, Auto">
+                        <StackPanel Spacing="5" VerticalAlignment="Center">
+                            <TextBlock Text="{DynamicResource SettingsResetBtn}" FontWeight="SemiBold" Foreground="{DynamicResource ColorDanger}"/>
+                            <TextBlock Text="{DynamicResource SettingsResetInfo}" FontSize="{DynamicResource FontSizeSmall}" Opacity="0.7" TextWrapping="Wrap" Margin="0,0,20,0"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" 
+                                Content="{DynamicResource SettingsResetBtn}" 
+                                Command="{Binding ShowResetConfirmCommand}"
+                                Classes="Danger"/>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Legal & Version Info -->
+        <StackPanel Grid.Row="2" Spacing="5" HorizontalAlignment="Center" Margin="0,20,0,0">
+            <TextBlock Text="License Generator v1.0.0" 
+                       HorizontalAlignment="Center"
+                       FontSize="{DynamicResource FontSizeSmall}" 
+                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+            <TextBlock Text="© 2026 Gonzalo Martínez García. All rights reserved." 
+                       HorizontalAlignment="Center"
+                       FontSize="{DynamicResource FontSizeSmall}" 
+                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+        </StackPanel>
+
+        <!-- Confirmation Overlays -->
+        <Grid Grid.Row="0" Grid.RowSpan="3" 
+              Background="#AA000000" 
+              IsVisible="{Binding IsResetConfirmOpen}"
+              ZIndex="100">
+            <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                    BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8" 
+                    Padding="30" 
+                    Width="400" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center"
+                    BoxShadow="0 10 20 0 #66000000">
+                <StackPanel Spacing="20">
+                    <TextBlock Text="{DynamicResource SettingsResetConfirmTitle}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{DynamicResource SettingsResetInfo}" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                        <Button Content="{DynamicResource CommonCancel}" Command="{Binding CancelResetCommand}" Width="120" HorizontalContentAlignment="Center"/>
+                        <Button Content="{DynamicResource CommonConfirm}" Command="{Binding ConfirmResetCommand}" Classes="Danger" Width="120" HorizontalContentAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="0" Grid.RowSpan="3" 
+              Background="#AA000000" 
+              IsVisible="{Binding IsImportConfirmOpen}"
+              ZIndex="101">
+            <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                    BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8" 
+                    Padding="30" 
+                    Width="450" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center"
+                    BoxShadow="0 10 20 0 #66000000">
+                <StackPanel Spacing="20">
+                    <TextBlock Text="{DynamicResource Backup.ImportTitle}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{DynamicResource Backup.ImportWarning}" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                        <Button Content="{DynamicResource CommonCancel}" Command="{Binding CancelImportCommand}" Width="120" HorizontalContentAlignment="Center"/>
+                        <Button Content="{DynamicResource CommonConfirm}" Command="{Binding ConfirmImportCommand}" Classes="Danger" Width="120" HorizontalContentAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

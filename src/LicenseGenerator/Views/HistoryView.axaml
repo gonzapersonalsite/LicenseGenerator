@@ -1,0 +1,116 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:LicenseGenerator.ViewModels"
+             xmlns:controls="using:LicenseGenerator.Views.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="using:LicenseGenerator.Converters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="LicenseGenerator.Views.HistoryView"
+             x:DataType="vm:HistoryViewModel">
+    <UserControl.Resources>
+        <converters:NullableDateToTextConverter x:Key="NullableDateToTextConverter"/>
+        <converters:LocalizationConverter x:Key="LocalizationConverter"/>
+    </UserControl.Resources>
+
+    <Grid RowDefinitions="Auto, Auto, *">
+        <TextBlock Grid.Row="0" Text="{DynamicResource HistoryViewTitle}" FontSize="{DynamicResource FontSizeExtraLarge}" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <!-- Search Bar -->
+        <controls:SearchBar Grid.Row="1" 
+                            SearchText="{Binding SearchText, Mode=TwoWay}"
+                            Watermark="{DynamicResource HistorySearchPlaceholder}"
+                            Margin="0,0,0,10"/>
+
+        <!-- Paginated List -->
+        <controls:PaginatedList Grid.Row="2"
+                                 CurrentPage="{Binding CurrentPage, Mode=TwoWay}"
+                                 TotalCount="{Binding TotalCount}"
+                                 PageSize="{Binding PageSize, Mode=TwoWay}"
+                                 NextPageCommand="{Binding NextPageCommand}"
+                                 PreviousPageCommand="{Binding PreviousPageCommand}">
+            <DataGrid ItemsSource="{Binding FilteredLicenses}" 
+                       IsReadOnly="True" 
+                       CanUserResizeColumns="True"
+                       BorderThickness="1" BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding AppId}" Width="Auto">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource HistoryColumnApp}"/>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Binding="{Binding RegistrationName}" Width="*">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource HistoryColumnClient}"/>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Binding="{Binding HardwareId}" Width="Auto">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource HistoryColumnHwid}"/>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Binding="{Binding ExpirationDate, Converter={StaticResource NullableDateToTextConverter}}" Width="Auto">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{DynamicResource HistoryColumnExpiration}"/>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTemplateColumn Width="180">
+                        <DataGridTemplateColumn.Header>
+                            <TextBlock Text="{DynamicResource HistoryColumnActions}"/>
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Button Content="{DynamicResource CommonCopy}" 
+                                             Command="{Binding $parent[UserControl].((vm:HistoryViewModel)DataContext).CopyLicenseCommand}"
+                                             CommandParameter="{Binding}"
+                                             Classes="Success"
+                                             FontSize="{DynamicResource FontSizeSmall}" Padding="8,2"/>
+                                    <Button Content="{DynamicResource CommonDelete}" 
+                                             Command="{Binding $parent[UserControl].((vm:HistoryViewModel)DataContext).DeleteLicenseCommand}"
+                                             CommandParameter="{Binding}"
+                                             Classes="Danger"
+                                             FontSize="{DynamicResource FontSizeSmall}" Padding="8,2"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </controls:PaginatedList>
+
+        <!-- Confirmation Overlay -->
+        <Grid Grid.Row="0" Grid.RowSpan="3" 
+              Background="#AA000000" 
+              IsVisible="{Binding IsConfirmDeleteOpen}"
+              ZIndex="100">
+            <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                    BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8" 
+                    Padding="30" 
+                    Width="400" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center"
+                    BoxShadow="0 10 20 0 #66000000">
+                <StackPanel Spacing="20">
+                    <TextBlock Text="{DynamicResource HistoryDeleteConfirmTitle}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center">
+                        <Run Text="{DynamicResource HistoryDeleteConfirmMsg}"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding LicenseToDelete.RegistrationName}" FontWeight="SemiBold"/>
+                        <Run Text="?"/>
+                    </TextBlock>
+                    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                        <Button Content="{DynamicResource CommonCancel}" Command="{Binding CancelDeleteCommand}" Width="120" HorizontalContentAlignment="Center"/>
+                        <Button Content="{DynamicResource CommonConfirm}" Command="{Binding ConfirmDeleteCommand}" Classes="Danger" Width="120" HorizontalContentAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
