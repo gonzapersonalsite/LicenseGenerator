@@ -1,66 +1,68 @@
-# 🏗️ Arquitectura del Sistema: Ecosistema de Licencias
+[🇪🇸 Español](docs/es/ARCHITECTURE.md) | 🇺🇸 **English** | [🇩🇪 Deutsch](docs/de/ARCHITECTURE.md)
 
-Este documento detalla el diseño técnico y los principios de seguridad que sustentan el License Generator.
+# 🏗️ System Architecture: License Ecosystem
+
+This document details the technical design and security principles underlying the License Generator.
 
 ---
 
-## 🔒 El Modelo de Seguridad: RSA + SHA256
+## 🔒 The Security Model: RSA + SHA256
 
-El sistema utiliza un esquema de **Confianza Unidireccional** basado en RSA. El desarrollador tiene el poder de "firmar" (Clave Privada) y las aplicaciones solo tienen el poder de "verificar" (Clave Pública).
+The system uses a **One-Way Trust** scheme based on RSA. The developer has the power to "sign" (Private Key), and applications only have the power to "verify" (Public Key).
 
-### Flujo Criptográfico
+### Cryptographic Flow
 
 ```mermaid
 sequenceDiagram
-    participant D as Desarrollador
-    participant G as Generador
-    participant C as Cliente
-    participant A as App Destino
+    participant D as Developer
+    participant G as Generator
+    participant C as Client
+    participant A as Target App
 
-    G->>G: Crear Par RSA (2048-bit)
-    G->>D: Exportar public.pem
-    D->>A: Incrustar public.pem en código
-    C->>D: Envía HWID (Identidad PC)
-    D->>G: Firma(AppId + HWID + Expiración) 
-    G->>D: Licencia Firmada (Base64)
-    D->>C: Entrega Licencia
-    C->>A: Activa Licencia
-    A->>A: Verifica(Licencia, public.pem)
-    Note over A: Si la firma es OK y el HWID coincide, se activa.
+    G->>G: Create RSA Pair (2048-bit)
+    G->>D: Export public.pem
+    D->>A: Embed public.pem in code
+    C->>D: Sends HWID (PC Identity)
+    D->>G: Signs(AppId + HWID + Expiration) 
+    G->>D: Signed License (Base64)
+    D->>C: Delivers License
+    C->>A: Activates License
+    A->>A: Verifies(License, public.pem)
+    Note over A: If signature is OK and HWID matches, activate.
 ```
 
 ---
 
-## 🛠️ Fundamentos de Diseño
+## 🛠️ Design Fundamentals
 
-### 1. Estandarización PEM (PKCS#8)
-A diferencia de los formatos XML antiguos de .NET, esta herramienta utiliza el estándar **PEM (Privacy-Enhanced Mail)**.
-- **Interoperabilidad**: El formato Base64 delimitado por cabeceras `-----BEGIN...` es el estándar global. Cualquier lenguaje de programación (Python, Node.js, Java, Go, Rust, etc.) puede leer estas llaves directamente sin adaptadores ni conversiones.
-- **Portabilidad**: Las licencias generadas son JSON firmado con RSA — un formato universal. Tu app cliente puede estar escrita en cualquier tecnología, no necesita ser .NET.
-- **Seguridad**: Implementa PKCS#8 para la clave privada y SubjectPublicKeyInfo para la pública.
-- **Algoritmo**: RSA 2048-bit + SHA256 + PKCS1v15 padding — el esquema de firma más soportado en toda la industria.
+### 1. PEM Standardization (PKCS#8)
+Unlike older XML formats in .NET, this tool uses the **PEM (Privacy-Enhanced Mail)** standard.
+- **Interoperability**: The Base64 format delimited by `-----BEGIN...` headers is the global standard. Any programming language (Python, Node.js, Java, Go, Rust, etc.) can read these keys directly without adapters or conversions.
+- **Portability**: Generated licenses are RSA-signed JSON — a universal format. Your client app can be written in any technology, it doesn't need to be .NET.
+- **Security**: Implements PKCS#8 for the private key and SubjectPublicKeyInfo for the public key.
+- **Algorithm**: RSA 2048-bit + SHA256 + PKCS1v15 padding — the most widely supported signing scheme in the industry.
 
-### 2. Vinculación de Hardware (HWID Binding)
-La seguridad no se basa solo en la firma, sino en el **vínculo físico**. 
-1. La aplicación cliente genera un identificador basado en componentes del PC (CPU, Placa Base, o MachineGuid de Windows).
-2. El Generador incluye este ID dentro del paquete firmado de la licencia.
-3. El validador en el cliente recrea el ID del hardware local y lo compara con el ID firmado.
-4. **Resultado**: Si un usuario piratea el archivo de licencia y lo lleva a otro PC, el HWID no coincidirá y el validador la rechazará, aunque la firma criptográfica sea perfecta.
+### 2. Hardware Binding (HWID)
+Security is not just based on the signature, but on the **physical link**.
+1. The client application generates an identifier based on PC components (CPU, Motherboard, or Windows MachineGuid).
+2. The Generator includes this ID within the signed license package.
+3. The validator on the client recreates the local hardware ID and compares it with the signed ID.
+4. **Result**: If a user pirates the license file and moves it to another PC, the HWID will not match, and the validator will reject it, even if the cryptographic signature is perfect.
 
-### 3. Integridad del Contrato (`GetDataToSign`)
-Para evitar ataques de manipulación (como cambiar manualmente la fecha de expiración en el archivo JSON), el sistema firma un **bloque consolidado**.
+### 3. Contract Integrity (`GetDataToSign`)
+To prevent tampering attacks (like manually changing the expiration date in the JSON file), the system signs a **consolidated block**.
 
-`Firma = RSA_Sign(AppId | Nombre | HWID | Expiración)`
+`Signature = RSA_Sign(AppId | Name | HWID | Expiration)`
 
-Si se cambia un solo bit en la licencia (ej: de 2024 a 2030), el cliente generará un bloque diferente y la firma dejará de ser válida.
+If a single bit is changed in the license (e.g., from 2024 to 2030), the client will generate a different block and the signature will no longer be valid.
 
 ---
 
-## 📂 Organización de Datos
+## 📂 Data Organization
 
-La aplicación sigue el patrón de **Almacenamiento Desacoplado**:
-- **Binarios**: El código ejecutable puede vivir en cualquier sitio.
-- **Almacén de Datos (`AppData/Local`)**: Contiene las llaves y el historial.
+The application follows the **Decoupled Storage** pattern:
+- **Binaries**: The executable code can live anywhere.
+- **Data Store (`AppData/Local`)**: Contains the keys and history.
 
 ```text
 LicenseGenerator/
@@ -70,22 +72,22 @@ LicenseGenerator/
 │   │   └── private.pem
 │   └── App2/
 │       └── ...
-└── History.json      (Registro de licencias emitidas)
+└── History.json      (Record of issued licenses)
 ```
 ---
 
-## ⚖️ Modelo Legal y de Uso
+## ⚖️ Legal and Usage Model
 
-A diferencia de muchas utilidades de seguridad, el **License Generator** no es un proyecto de código abierto sin restricciones.
+Unlike many security utilities, **License Generator** is not an open-source project without restrictions.
 
-1. **Propiedad Intelectual**: El diseño de los algoritmos de firma y la arquitectura del generador son propiedad del autor.
-2. **Licencia EULA**: El software se rige por un Contrato de Licencia de Usuario Final ([LICENSE](LICENSE)) que permite el uso personal pero prohíbe la explotación comercial o modificación por terceros.
-3. **Responsabilidad**: El autor no se hace responsable del uso que se le dé a las licencias generadas ni de la seguridad de las aplicaciones que las integren.
+1. **Intellectual Property**: The design of the signing algorithms and the generator architecture are the property of the author.
+2. **EULA License**: The software is governed by an End User License Agreement ([LICENSE](../../LICENSE)) that allows free use to manage licenses for your applications (commercial or otherwise), but strictly prohibits the sale, redistribution, or reverse engineering of the Generator itself.
+3. **Liability**: The author is not responsible for the use made of the generated licenses nor for the security of the applications that integrate them.
 
 > [!IMPORTANT]
-> Al utilizar esta herramienta, el desarrollador acepta que es responsable de la custodia de sus llaves privadas y de la correcta implementación del lado cliente.
+> By using this tool, the developer accepts responsibility for the custody of their private keys and for the correct implementation on the client side.
 
 ---
 
 > [!NOTE]
-> Este diseño permite actualizar el generador sin tocar nunca tus llaves maestras ni perder el historial de tus clientes.
+> This design allows updating the generator without ever touching your master keys or losing your client history.

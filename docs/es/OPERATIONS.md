@@ -1,71 +1,71 @@
-[🇪🇸 Español](docs/es/OPERATIONS.md) | 🇺🇸 **English** | [🇩🇪 Deutsch](docs/de/OPERATIONS.md)
+🇪🇸 **Español** | [🇺🇸 English](../../OPERATIONS.md) | [🇩🇪 Deutsch](../de/OPERATIONS.md)
 
-# 📔 LicenseGenerator Operations and Integration Guide
+# 📔 Guía de Operaciones e Integración de LicenseGenerator
 
-This guide is the complete manual for operating the Generator and, above all, for **integrating the licensing system into your own applications** professionally — regardless of the programming language you use.
+Esta guía es el manual completo para operar el Generador y, sobre todo, para **integrar el sistema de licencias en tus propias aplicaciones** de forma profesional — sin importar el lenguaje de programación que uses.
 
 > [!TIP]
-> **The Big Advantage**: This system is designed for developers who do not want (or cannot) maintain a complex server infrastructure. It allows you to manage and sell licenses for **all your apps** simply, organized, and completely offline. No external databases, no APIs, no monthly maintenance costs. Just you and your keys.
+> **La gran ventaja**: Este sistema está diseñado para desarrolladores que no quieren (o no pueden) mantener una infraestructura compleja de servidores. Te permite gestionar y vender licencias de **todas tus apps** de forma simple, organizada y totalmente offline. Sin bases de datos externas, sin APIs, sin costes de mantenimiento mensuales. Solo tú y tus llaves.
 
 ---
 
-## 🔄 Flow Overview
+## 🔄 Visión General del Flujo
 
-For a licensing system to work, the **Generator** (your admin tool) and the **Client** (the end-user app) must be synchronized via RSA cryptography. They only need to share **one thing**: the public key.
+Para que un sistema de licencias funcione, el **Generador** (tu herramienta de administración) y el **Cliente** (la app del usuario final) deben estar sincronizados mediante criptografía RSA. Solo necesitan compartir **una cosa**: la clave pública.
 
 ```mermaid
 graph TD
-    A[Generator: Create App] -->|Generates RSA pair| B(public.pem / private.pem)
-    B -->|Copy public.pem| C[Client App: Hardcode Key]
-    D[Client App: Get HWID] -->|Send to Developer| E[Generator: Issue License]
-    E -->|Sign with private.pem| F(Base64 License Code)
-    F -->|Send to Client| G[Client App: Activate]
-    G -->|Validate with public.pem| H{Valid?}
-    H -->|Yes| I[Access Authorized]
-    H -->|No| J[Access Denied]
+    A[Generador: Crear App] -->|Genera par RSA| B(public.pem / private.pem)
+    B -->|Copiar public.pem| C[App Cliente: Hardcodear Clave]
+    D[App Cliente: Obtener HWID] -->|Enviar al Desarrollador| E[Generador: Emitir Licencia]
+    E -->|Firmar con private.pem| F(Código de Licencia Base64)
+    F -->|Enviar al Cliente| G[App Cliente: Activar]
+    G -->|Validar con public.pem| H{¿Válida?}
+    H -->|Sí| I[Acceso Autorizado]
+    H -->|No| J[Acceso Denegado]
 ```
 
-**Why does it work?** Because the private key (which only you have) signs the data, and the public key (which you embed in your app) can only **verify** that signature, never create it. A pirate would need your private key to generate valid licenses for your app — and that key never leaves your computer.
+**¿Por qué funciona?** Porque la clave privada (que solo tú tienes) firma los datos, y la clave pública (que incrustas en tu app) solo puede **verificar** esa firma, nunca crearla. Un pirata necesitaría tu clave privada para generar licencias falsas — y esa clave nunca sale de tu ordenador.
 
 ---
 
-## 🛠 Phase 1: Preparation in the Generator
+## 🛠 Fase 1: Preparación en el Generador
 
-Before touching a single line of code in your application, you must register it in the Generator. This tells the system: "I'm going to need licenses for this product."
+Antes de tocar una sola línea de código en tu aplicación, debes registrarla en el Generador. Esto le dice al sistema: "Voy a necesitar licencias para este producto."
 
-1.  **Start the Generator**: Open the `LicenseGenerator` application.
-2.  **App Management**: Go to the corresponding tab and create a new entry with a descriptive **AppID** (e.g., `MySuperApp`). This name is important — it links the licenses to your product.
-3.  **The Export Moment**: As soon as you press "Create App", the tool automatically does the following:
-    -   Generates a unique **2048-bit** RSA key pair for that App.
-    -   **EXPORTS** the PEM files to the folder:
-        `%LocalAppData%\LicenseGenerator\Keys\MySuperApp\`
-4.  **Locate your Public Key**: Open the `public.pem` file that just appeared in that folder. **This is the key your app will use to verify that the licenses are yours.** Don't lose it — although if you do, you can always copy it again from that path.
+1.  **Inicia el Generador**: Abre la aplicación `LicenseGenerator`.
+2.  **Gestión de Apps**: Ve a la pestaña correspondiente y crea una nueva entrada con un **AppID** descriptivo (ej: `MiSuperApp`). Este nombre es importante — es el que vinculará las licencias a tu producto.
+3.  **El Momento de la Exportación**: En cuanto pulses "Crear App", la herramienta hace lo siguiente automáticamente:
+    -   Genera un par de llaves RSA de **2048 bits** únicas para esa App.
+    -   **EXPORTA** los archivos PEM a la carpeta:
+        `%LocalAppData%\LicenseGenerator\Keys\MiSuperApp\`
+4.  **Localiza tu Clave Pública**: Abre el archivo `public.pem` que acaba de aparecer en esa carpeta. **Esta es la clave que tu app usará para verificar que las licencias son tuyas.** No la pierdas — aunque si la pierdes, siempre puedes volver a copiarla desde esa ruta.
 
 > [!CAUTION]
-> **Never distribute the `private.pem` file.** It is your private key. If someone gets it, they can generate valid licenses for your app. Treat it like a master password.
+> **Nunca distribuyas el archivo `private.pem`.** Es tu llave privada. Si alguien la obtiene, podrá generar licencias válidas para tu app. Trátala como una contraseña maestra.
 
 ---
 
-## 📋 Centralized Management per Application
+## 📋 Gestión Centralizada por Aplicación
 
-**License Generator** acts as your centralized control panel for all your products:
+El **License Generator** actúa como tu panel de control centralizado para todos tus productos:
 
--   **Isolation**: Every application you register works as a watertight compartment. It has its own RSA keys and its own license history. The keys for `MySuperApp` have no relation to those of `OtherApp`.
--   **Tracking**: In the **History** tab, you can filter by application to see exactly who has an active license, when it was issued, and when it expires.
--   **Customer Support**: If a user has trouble with their license, simply search for their name or HWID in the history to resend their code. And if they changed computers (loss, theft, upgrade), you simply generate a new license with their new HWID — no intermediate servers, no complications, and no cost.
--   **State Control**: Being an offline system, the "state" of a license in the generator is an administrative record. The client application only verifies the signature locally — it doesn't need internet to check if its license is valid.
+-   **Aislamiento**: Cada aplicación que registres funciona como un compartimento estanco. Tiene sus propias llaves RSA y su propio historial de licencias. Las llaves de `MiSuperApp` no tienen relación con las de `OtraApp`.
+-   **Seguimiento**: En la pestaña **Historial**, puedes filtrar por aplicación para ver exactamente quién tiene una licencia activa, cuándo se emitió y cuándo expira.
+-   **Soporte al cliente**: Si un usuario tiene problemas con su licencia, basta con buscar su nombre o HWID en el historial para reenviarle su código. Y si cambió de equipo (pérdida, robo, upgrade), simplemente generas una nueva licencia con su nuevo HWID — sin servidores intermedios, sin complicaciones y sin coste.
+-   **Control de Estado**: Al ser un sistema offline, el "estado" de una licencia en el generador es un registro administrativo. La aplicación del cliente solo verifica la firma localmente — no necesita internet para comprobar que su licencia es válida.
 
 ---
 
-## 💻 Phase 2: Client Integration
+## 💻 Fase 2: Integración en el Cliente
 
-This is the crucial part. This is where your application learns to verify licenses. The process is the same regardless of language: you need 3 fundamental pieces.
+Esta es la parte crucial. Aquí es donde tu aplicación aprende a verificar licencias. El proceso es el mismo sin importar el lenguaje: necesitas 3 piezas fundamentales.
 
-### Piece 1: The Data Contract (`LicenseData`)
+### Pieza 1: El Contrato de Datos (`LicenseData`)
 
-This is the structure representing a license. **It must be identical in the Generator and in your app.** It is the "contract" between both sides.
+Esta es la estructura que representa una licencia. **Tiene que ser idéntica en el Generador y en tu app.** Es el "contrato" entre ambos lados.
 
-The most critical part is the `GetDataToSign()` method: it generates the exact string that was signed. If this method produces a different result than the Generator, **the signature will always fail**.
+Lo más crítico es el método `GetDataToSign()`: genera la cadena exacta que se firmó. Si este método produce un resultado distinto al del Generador, **la firma siempre fallará**.
 
 ````tabs
 ```tab=C# (.NET 6+)
@@ -77,7 +77,7 @@ public class LicenseData
     public DateTime? ExpirationDate { get; set; }
     public string Signature { get; set; } = string.Empty;
 
-    // CRITICAL: This method must be IDENTICAL in Generator and Client
+    // CRÍTICO: Este método debe ser IDÉNTICO en el Generador y en el Cliente
     public string GetDataToSign()
     {
         var dateStr = ExpirationDate?.ToString("yyyy-MM-dd") ?? "NEVER";
@@ -96,13 +96,13 @@ class LicenseData:
     AppId: str = ""
     RegistrationName: str = ""
     HardwareId: str = ""
-    ExpirationDate: Optional[str] = None  # format "yyyy-MM-ddTHH:mm:ss"
+    ExpirationDate: Optional[str] = None  # formato "yyyy-MM-ddTHH:mm:ss"
     Signature: str = ""
 
     def get_data_to_sign(self) -> str:
-        """CRITICAL: Must produce the same string as the C# Generator"""
+        """CRÍTICO: Debe producir la misma cadena que el Generador C#"""
         if self.ExpirationDate:
-            # Parse ISO date and extract only yyyy-MM-dd
+            # Parsear la fecha ISO y extraer solo yyyy-MM-dd
             date_str = datetime.fromisoformat(self.ExpirationDate).strftime("%Y-%m-%d")
         else:
             date_str = "NEVER"
@@ -118,7 +118,7 @@ class LicenseData {
         this.Signature = data.Signature || '';
     }
 
-    // CRITICAL: Must produce the same string as the C# Generator
+    // CRÍTICO: Debe producir la misma cadena que el Generador C#
     getDataToSign() {
         let dateStr = 'NEVER';
         if (this.ExpirationDate) {
@@ -132,19 +132,19 @@ class LicenseData {
 ````
 
 > [!IMPORTANT]
-> **The Golden Rule**: `GetDataToSign()` must produce **exactly** the string `AppId|Name|HWID|yyyy-MM-dd` (or `NEVER`). A single character difference (a space, a capital letter, a different date format) will make the signature invalid. The separator is always `|`.
+> **La regla de oro**: `GetDataToSign()` debe producir **exactamente** la cadena `AppId|Nombre|HWID|yyyy-MM-dd` (o `NEVER`). Un solo carácter de diferencia (un espacio, una mayúscula, un formato de fecha distinto) hará que la firma sea inválida. El separador siempre es `|`.
 
 ---
 
-### Piece 2: The Hardware Identifier (HWID)
+### Pieza 2: El Identificador de Hardware (HWID)
 
-The HWID is what prevents a user from copying their license to another PC. The idea is simple: your app generates a unique identifier based on the computer hardware, and that identifier is included inside the signature. If the license travels to another PC, the HWID will not match.
+El HWID es lo que impide que un usuario copie su licencia a otro PC. La idea es simple: tu app genera un identificador único basado en el hardware del equipo, y ese identificador se incluye dentro de la firma. Si la licencia viaja a otro PC, el HWID no coincidirá.
 
-**You can use whatever method you want** to generate the HWID, but it must follow two rules:
-1.  **Deterministic**: The same machine always generates the same ID.
-2.  **Identical**: The format your app shows the user (to send to you) must be exactly the one used later to validate.
+**Puedes usar el método que quieras** para generar el HWID, pero debe cumplir dos reglas:
+1.  **Determinista**: La misma máquina siempre genera el mismo ID.
+2.  **Idéntico**: El formato que muestra tu app al usuario (para que lo envíe) debe ser exactamente el que después se usa para validar.
 
-The Generator does not enforce any HWID format — it simply signs what it receives. **You decide how to generate it.**
+El Generador no impone ningún formato de HWID — simplemente firma lo que recibe. **Tú decides cómo generarlo.**
 
 ````tabs
 ```tab=C# (.NET — Windows + Linux)
@@ -156,13 +156,13 @@ public string GetMachineId()
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            // Windows: MachineGuid from registry (unique per Windows installation)
+            // Windows: MachineGuid del registro (único por instalación de Windows)
             using var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Cryptography");
             id = key?.GetValue("MachineGuid")?.ToString() ?? string.Empty;
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            // Linux: /etc/machine-id is standard in systemd
+            // Linux: El archivo /etc/machine-id es estándar en systemd
             if (File.Exists("/etc/machine-id"))
                 id = File.ReadAllText("/etc/machine-id").Trim();
             else if (File.Exists("/var/lib/dbus/machine-id"))
@@ -180,7 +180,7 @@ public string GetMachineId()
 
         if (string.IsNullOrEmpty(id)) return "GENERIC-HWID";
 
-        // Friendly format: first 8 chars, uppercase
+        // Formato amigable: primeros 8 caracteres, mayúsculas
         return id.Replace("-", "").Substring(0, 8).ToUpper();
     }
     catch { return "UNKNOWN-HWID"; }
@@ -190,7 +190,7 @@ public string GetMachineId()
 import platform, subprocess, re, uuid
 
 def get_machine_id() -> str:
-    """Gets an 8-char HWID from current machine."""
+    """Obtiene un HWID de 8 caracteres del equipo actual."""
     system = platform.system()
     raw_id = ""
 
@@ -225,7 +225,7 @@ function getMachineId() {
     let rawId = '';
 
     if (process.platform === 'win32') {
-        // Windows: reads MachineGuid from registry
+        // Windows: lee MachineGuid del registro
         const output = execSync(
             'reg query HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid'
         ).toString();
@@ -249,21 +249,21 @@ function getMachineId() {
 ````
 
 > [!NOTE]
-> **Why 8 characters?** Just for usability. A full GUID like `a8c3f1e2-b456-7890-cdef-1234567890ab` is hard to dictate over the phone or type. The first 8 characters (`A8C3F1E2`) are enough to differentiate millions of computers and the user can easily copy them.
+> **¿Por qué 8 caracteres?** Solo por usabilidad. Un GUID completo como `a8c3f1e2-b456-7890-cdef-1234567890ab` es difícil de dictar por teléfono o teclear. Los primeros 8 caracteres (`A8C3F1E2`) son suficientes para diferenciar millones de equipos y el usuario puede copiarlos fácilmente.
 
 ---
 
-### Piece 3: The License Service (Complete)
+### Pieza 3: El Servicio de Licencias (Completo)
 
-This is where everything comes together. This is the complete service your app needs, with 4 essential functions:
+Aquí es donde todo se une. Este es el servicio completo que necesita tu app, con las 4 funciones esenciales:
 
-1.  **`GetMachineId()`** — To show the user their HWID so they can send it to you.
-2.  **`Activate(code)`** — To decode and validate the Base64 you deliver to the client.
-3.  **`IsLicensed()`** — To quickly check if there is an active license (called on startup).
-4.  **`Validate(license)`** — The RSA cryptographic verification itself.
+1.  **`GetMachineId()`** — Para mostrar al usuario su HWID y que te lo envíe.
+2.  **`Activate(code)`** — Para decodificar y validar el Base64 que le entregas al cliente.
+3.  **`IsLicensed()`** — Para comprobar rápidamente si hay una licencia activa (se llama al arrancar la app).
+4.  **`Validate(license)`** — La verificación criptográfica RSA en sí.
 
 ````tabs
-```tab=C# (.NET 6+) — Complete Implementation
+```tab=C# (.NET 6+) — Implementación completa
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -278,25 +278,25 @@ public interface ILicenseService
 
 public class LicenseService : ILicenseService
 {
-    private const string AppId = "MySuperApp";     // Must match ID in Generator
+    private const string AppId = "MiSuperApp";     // Debe coincidir con el ID en el Generador
     private const string LicenseFileName = "license.lic";
 
-    // PASTED FROM public.pem EXPORTED BY GENERATOR
+    // PEGADO DESDE EL ARCHIVO public.pem QUE EXPORTÓ EL GENERADOR
     private const string PublicKeyPem = @"-----BEGIN PUBLIC KEY-----
-HERE_GOES_YOUR_FULL_PUBLIC_KEY
-WITH_HEADERS_AND_EVERYTHING
+AQUI_VA_TU_CLAVE_PUBLICA_COMPLETA
+CON_SUS_CABECERAS_Y_TODO
 -----END PUBLIC KEY-----";
 
     private LicenseData? _cachedLicense;
 
     // ══════════════════════════════════════════════════════════════
-    // 1. CHECK: Is there a valid license? (Call on startup)
+    // 1. COMPROBAR: ¿Hay licencia válida? (Llamar al arrancar)
     // ══════════════════════════════════════════════════════════════
     public bool IsLicensed()
     {
         if (_cachedLicense != null) return true;
 
-        // Try load from disk (if already activated)
+        // Intentar cargar del disco (por si ya se activó antes)
         var license = LoadFromFile();
         if (license != null && Validate(license))
         {
@@ -307,46 +307,46 @@ WITH_HEADERS_AND_EVERYTHING
     }
 
     // ══════════════════════════════════════════════════════════════
-    // 2. ACTIVATE: User pastes Base64 code you sent
+    // 2. ACTIVAR: El usuario pega el código Base64 que le enviaste
     // ══════════════════════════════════════════════════════════════
     public bool Activate(string licenseKey)
     {
         try
         {
-            // Generator produces: Base64 → containing JSON → containing data
+            // El Generador produce: Base64 → que dentro tiene JSON → que dentro tiene los datos
             var json = Encoding.UTF8.GetString(Convert.FromBase64String(licenseKey));
             var license = JsonSerializer.Deserialize<LicenseData>(json);
 
             if (license != null && Validate(license))
             {
-                SaveToFile(licenseKey);       // Persist for next startups
+                SaveToFile(licenseKey);       // Persistir para próximos arranques
                 _cachedLicense = license;
                 return true;
             }
         }
-        catch { /* Invalid format — code corrupt or copied wrong */ }
+        catch { /* Formato inválido — el código está corrupto o mal copiado */ }
         return false;
     }
 
     public LicenseData? GetCurrentLicense() => _cachedLicense;
 
     // ══════════════════════════════════════════════════════════════
-    // 3. VALIDATE: RSA Cryptographic Verification
+    // 3. VALIDAR: Verificación criptográfica RSA
     // ══════════════════════════════════════════════════════════════
     private bool Validate(LicenseData license)
     {
-        // Is it for this app?
+        // ¿Es para esta app?
         if (license.AppId != AppId) return false;
 
-        // Does hardware match?
+        // ¿Coincide el hardware?
         if (license.HardwareId != GetMachineId()) return false;
 
-        // Expired?
+        // ¿Ha expirado?
         if (license.ExpirationDate.HasValue && license.ExpirationDate < DateTime.Now) return false;
 
         try
         {
-            // RSA signature: import public key and verify
+            // La firma RSA: importar la clave pública y verificar
             using var rsa = RSA.Create();
             rsa.ImportFromPem(PublicKeyPem);
 
@@ -359,15 +359,15 @@ WITH_HEADERS_AND_EVERYTHING
     }
 
     // ══════════════════════════════════════════════════════════════
-    // 4. HWID: Unique PC Identity (see previous section)
+    // 4. HWID: Identidad única del PC (ver sección anterior)
     // ══════════════════════════════════════════════════════════════
     public string GetMachineId()
     {
-        // ... (use implementation from previous section)
+        // ... (usar la implementación de la sección anterior)
     }
 
     // ══════════════════════════════════════════════════════════════
-    // Persistence: Save/Load from disk
+    // Persistencia: Guardar/Cargar del disco
     // ══════════════════════════════════════════════════════════════
     private void SaveToFile(string licenseKey)
     {
@@ -391,33 +391,33 @@ WITH_HEADERS_AND_EVERYTHING
     {
         var dir = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            AppId  // Each app saves its license in its own folder
+            AppId  // Cada app guarda su licencia en su propia carpeta
         );
         if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
         return Path.Combine(dir, LicenseFileName);
     }
 }
 ```
-```tab=Python — Complete Implementation
+```tab=Python — Implementación completa
 import base64, json, os, platform
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding, utils
 
 # pip install cryptography
 
-APP_ID = "MySuperApp"
+APP_ID = "MiSuperApp"
 LICENSE_FILE = "license.lic"
 
-# PASTED FROM public.pem EXPORTED BY GENERATOR
+# PEGADO DESDE EL ARCHIVO public.pem QUE EXPORTÓ EL GENERADOR
 PUBLIC_KEY_PEM = """-----BEGIN PUBLIC KEY-----
-HERE_GOES_YOUR_FULL_PUBLIC_KEY
-WITH_HEADERS_AND_EVERYTHING
+AQUI_VA_TU_CLAVE_PUBLICA_COMPLETA
+CON_SUS_CABECERAS_Y_TODO
 -----END PUBLIC KEY-----"""
 
 _cached_license = None
 
 def get_license_path() -> str:
-    """Path where activated license is saved."""
+    """Ruta donde se guarda la licencia activada."""
     if platform.system() == "Windows":
         base = os.environ.get("LOCALAPPDATA", os.path.expanduser("~"))
     else:
@@ -427,7 +427,7 @@ def get_license_path() -> str:
     return os.path.join(directory, LICENSE_FILE)
 
 def validate(license: 'LicenseData') -> bool:
-    """Full RSA cryptographic verification."""
+    """Verificación criptográfica RSA completa."""
     if license.AppId != APP_ID:
         return False
     if license.HardwareId != get_machine_id():
@@ -452,7 +452,7 @@ def validate(license: 'LicenseData') -> bool:
         return False
 
 def activate(license_key: str) -> bool:
-    """Decodes Generator Base64, validates, and persists."""
+    """Decodifica el Base64 del Generador, valida, y persiste."""
     global _cached_license
     try:
         json_str = base64.b64decode(license_key).decode("utf-8")
@@ -468,7 +468,7 @@ def activate(license_key: str) -> bool:
     return False
 
 def is_licensed() -> bool:
-    """Checks if there is a valid license (on app startup)."""
+    """Comprueba si hay una licencia válida (al arrancar la app)."""
     global _cached_license
     if _cached_license:
         return True
@@ -487,19 +487,19 @@ def is_licensed() -> bool:
         pass
     return False
 ```
-```tab=Node.js — Complete Implementation
+```tab=Node.js — Implementación completa
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-const APP_ID = 'MySuperApp';
+const APP_ID = 'MiSuperApp';
 const LICENSE_FILE = 'license.lic';
 
-// PASTED FROM public.pem EXPORTED BY GENERATOR
+// PEGADO DESDE EL ARCHIVO public.pem QUE EXPORTÓ EL GENERADOR
 const PUBLIC_KEY_PEM = `-----BEGIN PUBLIC KEY-----
-HERE_GOES_YOUR_FULL_PUBLIC_KEY
-WITH_HEADERS_AND_EVERYTHING
+AQUI_VA_TU_CLAVE_PUBLICA_COMPLETA
+CON_SUS_CABECERAS_Y_TODO
 -----END PUBLIC KEY-----`;
 
 let cachedLicense = null;
@@ -559,117 +559,117 @@ function isLicensed() {
 ```
 ````
 
-**What does each part do, step by step?**
+**¿Qué hace cada parte, paso a paso?**
 
-1.  The Generator produces a JSON with `AppId`, `RegistrationName`, `HardwareId`, `ExpirationDate` and `Signature`, all encoded in **Base64**. That Base64 block is what you send to the client.
-2.  The client **decodes** the Base64 → gets the JSON → deserializes to `LicenseData`.
-3.  The validator **reconstructs** the `GetDataToSign()` string and uses the public key to verify that string was signed by your private key.
-4.  If it passes, a `license.lic` file is saved in the user's AppData so they don't have to activate again every time they open the app.
+1.  El Generador produce un JSON con `AppId`, `RegistrationName`, `HardwareId`, `ExpirationDate` y `Signature`, todo codificado en **Base64**. Ese bloque Base64 es lo que le envías al cliente.
+2.  El cliente **decodifica** el Base64 → obtiene el JSON → lo deserializa a `LicenseData`.
+3.  El validador **reconstruye** la cadena `GetDataToSign()` y usa la clave pública para verificar que esa cadena fue firmada por tu clave privada.
+4.  Si pasa, se guarda un archivo `license.lic` en el AppData del usuario para no tener que volver a activar cada vez que abra la app.
 
 ---
 
-## 🎨 Phase 3: Activation Screen in your App
+## 🎨 Fase 3: Pantalla de Activación en tu App
 
-Your app needs a screen where the user can:
-- **See their HWID** (to send it to you).
-- **Paste the license code** you sent them.
-- **Activate** and see the result.
+Tu app necesita una pantalla donde el usuario pueda:
+- **Ver su HWID** (para enviártelo).
+- **Pegar el código de licencia** que tú le enviaste.
+- **Activar** y ver el resultado.
 
-It doesn't matter if your interface is console, web, or desktop. The concept is the same:
+No importa si tu interfaz es de consola, web o escritorio. El concepto es el mismo:
 
 ```
 ┌──────────────────────────────────────────────┐
-│           🔑 License Activation              │
+│           🔑 Activación de Licencia          │
 │                                              │
-│  Your Machine ID: [ A8C3F1E2 ]  [📋 Copy]   │
+│  Tu ID de equipo: [ A8C3F1E2 ]  [📋 Copiar] │
 │                                              │
-│  License Code:                               │
+│  Código de licencia:                         │
 │  ┌──────────────────────────────────────┐    │
-│  │ (User pastes Base64 here)            │    │
+│  │ (El usuario pega el Base64 aquí)     │    │
 │  └──────────────────────────────────────┘    │
 │                                              │
-│               [ ✅ Activate ]                │
+│               [ ✅ Activar ]                 │
 │                                              │
-│  Status: ❌ Unlicensed                       │
+│  Estado: ❌ Sin licencia                     │
 └──────────────────────────────────────────────┘
 ```
 
-**The end-user flow is:**
-1.  Open your app → see activation screen.
-2.  Copy HWID and send it to you (email, web form, etc.).
-3.  You open Generator → select app → paste HWID → press Generate.
-4.  Send the resulting Base64 code to them.
-5.  Client pastes it in their app → presses Activate → done.
+**El flujo del usuario final es:**
+1.  Abre tu app → ve la pantalla de activación.
+2.  Copia su HWID y te lo envía (por email, formulario web, etc.).
+3.  Tú abres el Generador → seleccionas su app → pegas el HWID → pulsas Generar.
+4.  Le envías el código Base64 resultante.
+5.  El cliente lo pega en su app → pulsa Activar → listo.
 
 ---
 
-## 🎫 Phase 4: Issuing Licenses (Your Day-to-Day)
+## 🎫 Fase 4: Emisión de Licencias (Tu Día a Día)
 
-When a client wants to buy your app, the process is quick:
+Cuando un cliente quiera comprar tu app, el proceso es rápido:
 
-1.  **Ask for their HWID**: Your client app already has the "Copy ID" button.
-2.  **Open Generator**: Select the corresponding App.
-3.  **Fill in details**:
-    -   **Client**: Buyer's name (for your records).
-    -   **HWID**: The 8-character code they sent you.
-    -   **Expiration**: Pick a date or leave empty for lifetime license.
-4.  **Generate**: Press the button and you get a long Base64 block.
-5.  **Send**: Copy that block and send it to the client however you prefer.
+1.  **Pídele su HWID**: Tu app cliente ya tiene el botón para "Copiar ID de este equipo".
+2.  **Abre el Generador**: Selecciona la App correspondiente.
+3.  **Rellena los datos**:
+    -   **Cliente**: Nombre del comprador (para tu registro).
+    -   **HWID**: El código de 8 caracteres que te envió.
+    -   **Expiración**: Elige una fecha o déjalo vacío para licencia permanente.
+4.  **Genera**: Pulsa el botón y obtendrás un bloque Base64 largo.
+5.  **Envía**: Copia ese bloque y envíaselo al cliente por el medio que prefieras.
 
 > [!NOTE]
-> Each generated license is automatically recorded in the Generator's **History**. You can check it anytime to see how many licenses you've issued, to whom, and when they expire.
+> Cada licencia generada queda registrada automáticamente en el **Historial** del Generador. Puedes consultarlo en cualquier momento para ver cuántas licencias has emitido, a quién, y cuándo expiran.
 
 ---
 
-## 🚫 Irreversibility and Revocation
+## 🚫 Irreversibilidad y Revocación
 
 > [!CAUTION]
-> **Signature is Permanent**: Because this system uses offline asymmetric cryptography, a signed license is technically valid forever (or until expiration) on the client PC, without needing internet.
+> **La Firma es Permanente**: Debido a que este sistema utiliza criptografía asimétrica offline, una licencia firmada es técnicamente válida para siempre (o hasta su fecha de expiración) en el PC del cliente, sin necesidad de internet.
 
-**Can I revoke a license I already delivered?**
+**¿Puedo revocar una licencia que ya entregué?**
 
--   **Remotely: NO.** Since there is no central server the client checks on startup, you cannot "turn off" a license remotely.
--   **With a blacklist: YES.** You can implement a "Blacklist" in your next app update. If you include a list of revoked signatures in your code, validation can reject those licenses even if the RSA signature is correct.
--   **By major version: YES.** If you change the **Public Key** in a new version (e.g. V1 to V2), all previous licenses will stop working for that version. This is useful for charging for major upgrades.
+-   **De forma remota: NO.** Al no haber un servidor central que el cliente consulte en cada arranque, no puedes "apagar" una licencia a distancia.
+-   **Con una blacklist: SÍ.** Puedes implementar una "Lista Negra" en la próxima actualización de tu app. Si incluyes una lista de firmas revocadas en tu código, la validación puede rechazar esas licencias aunque la firma RSA sea correcta.
+-   **Por versión mayor: SÍ.** Si cambias la **Clave Pública** en una versión nueva (ej: de V1 a V2), todas las licencias anteriores dejarán de funcionar para esa versión. Esto es útil para cobrar por upgrades mayores.
 
 ---
 
-## 🌍 Tech Stack Compatibility
+## 🌍 Compatibilidad de Stacks Tecnológicos
 
-This system is **NOT** limited to .NET / C#. The Generator uses industrial cryptographic standards that any language supports:
+Este sistema **NO** está limitado a .NET / C#. El Generador usa estándares criptográficos industriales que cualquier lenguaje soporta:
 
-| Component | Standard Used | Universal? |
+| Componente | Estándar Usado | ¿Universal? |
 |:---|:---|:---|
-| RSA Keys | **PEM (PKCS#8 / SubjectPublicKeyInfo)** | ✅ Yes — global format |
-| Signing Algo | **RSA + SHA256 + PKCS1v15** | ✅ Yes — available in every crypto lib |
-| License Format | **JSON encoded in Base64** | ✅ Yes — depends on nothing .NET |
-| Signature Format | **Base64** | ✅ Yes — universal |
+| Llaves RSA | **PEM (PKCS#8 / SubjectPublicKeyInfo)** | ✅ Sí — formato global |
+| Algoritmo de firma | **RSA + SHA256 + PKCS1v15** | ✅ Sí — disponible en toda librería cripto |
+| Formato de licencia | **JSON codificado en Base64** | ✅ Sí — no depende de .NET |
+| Formato de firma | **Base64** | ✅ Sí — universal |
 
-**You can validate licenses in any stack:**
+**Puedes validar licencias en cualquier stack:**
 
-| Language/Stack | RSA/PEM Library | Difficulty |
+| Lenguaje/Stack | Librería RSA/PEM | Dificultad |
 |:---|:---|:---|
-| **C# / .NET 6+** | `System.Security.Cryptography` (native) | ⭐ Trivial |
+| **C# / .NET 6+** | `System.Security.Cryptography` (nativo) | ⭐ Trivial |
 | **Python** | `cryptography` (pip install) | ⭐ Trivial |
-| **Node.js** | `crypto` (native module) | ⭐ Trivial |
-| **Java / Kotlin** | `java.security` (native) | ⭐⭐ Easy (needs KeyFactory) |
-| **Rust** | `rsa` + `pem` crates | ⭐⭐ Easy |
-| **Go** | `crypto/rsa` (stdlib) | ⭐⭐ Easy |
-| **Swift** | `Security` framework | ⭐⭐ Easy |
-| **Electron / Web** | Node.js `crypto` or Web Crypto API | ⭐⭐ Easy |
+| **Node.js** | `crypto` (módulo nativo) | ⭐ Trivial |
+| **Java / Kotlin** | `java.security` (nativo) | ⭐⭐ Fácil (necesita KeyFactory) |
+| **Rust** | `rsa` + `pem` crates | ⭐⭐ Fácil |
+| **Go** | `crypto/rsa` (stdlib) | ⭐⭐ Fácil |
+| **Swift** | `Security` framework | ⭐⭐ Fácil |
+| **Electron / Web** | Node.js `crypto` o Web Crypto API | ⭐⭐ Fácil |
 
 > [!TIP]
-> **The Generator is an administration tool.** It lives on your PC as a desktop app (.NET). But the licenses it produces are **RSA-signed JSON files** — a format any program in any language can read and verify. Your client app can be made in Python, Java, React, Electron, Flutter, or whatever.
+> **El Generador es una herramienta de administración.** Él vive en tu PC como app de escritorio (.NET). Pero las licencias que produce son **archivos JSON firmados con RSA** — un formato que cualquier programa en cualquier lenguaje puede leer y verificar. Tu app cliente puede estar hecha en Python, Java, React, Electron, Flutter, o lo que sea.
 
 ---
 
-## ⚠️ Troubleshooting
+## ⚠️ Resolución de Problemas Comunes
 
-| Problem | Probable Cause | Solution |
+| Problema | Causa Probable | Solución |
 | :--- | :--- | :--- |
-| **"Signature Error"** | Public key doesn't match private key used to sign, or `GetDataToSign()` produces different string. | Re-copy full `public.pem` content (with `BEGIN/END` headers). Verify `\|` separators are correct. |
-| **"License not valid on this PC"** | HWID generated on client PC is different from what you entered when signing. | Ensure your app uses **exact same** HWID algorithm the Generator received. Watch out for case sensitivity. |
-| **"License expired"** | Client PC date is after `ExpirationDate`. | Generate new license with extended date. |
-| **"Error importing PEM"** (C#) | Missing `System.Security.Cryptography` or using .NET < 6. | Update to .NET 6+ which includes native `ImportFromPem()`. |
-| **"Error importing PEM"** (Python) | Missing `cryptography` library. | Run `pip install cryptography`. |
-| **License works in dev but not prod** | Published app uses different HWID (e.g. Docker container has different `machine-id`). | Verify production environment allows access to same hardware data. |
+| **"Error de Firma"** | La clave pública no coincide con la privada usada para firmar, o `GetDataToSign()` produce una cadena distinta. | Re-copia el contenido completo de `public.pem` (con cabeceras `BEGIN/END`). Verifica que los separadores `\|` son correctos. |
+| **"Licencia no válida en este PC"** | El HWID generado en el PC del cliente es distinto al que introdujiste al firmar. | Asegúrate de que tu app usa el **mismo algoritmo exacto** de HWID que el Generador recibió. Cuidado con mayúsculas/minúsculas. |
+| **"Licencia expirada"** | La fecha del PC del cliente es posterior a `ExpirationDate`. | Genera una nueva licencia con fecha extendida. |
+| **"Error al importar PEM"** (C#) | Falta `System.Security.Cryptography` o usas .NET inferior a 6. | Actualiza a .NET 6+ que incluye `ImportFromPem()` nativo. |
+| **"Error al importar PEM"** (Python) | No tienes instalada la librería `cryptography`. | Ejecuta `pip install cryptography`. |
+| **La licencia funciona en desarrollo pero no en producción** | La app publicada usa un HWID distinto (ej: un contenedor Docker tiene otro `machine-id`). | Verifica que el entorno de producción permite acceder a los mismos datos de hardware. |
