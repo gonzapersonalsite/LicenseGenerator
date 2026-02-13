@@ -41,6 +41,7 @@
     "SettingsDescription": "Choose how you want License Generator to look.",
     "SettingsInfoTitle": "Information",
     "SettingsInfoContent": "This application uses AppData to safely store your RSA keys and issued license history. Make sure to perform regular backups of your data folder.",
+    "Docs.ImplementationHint": "To correctly integrate this generator with your client applications (license validation, public key usage, etc.), please read the technical documentation and code examples in the official repository:",
     "ThemeLight": "Light",
     "ThemeDark": "Dark",
     "ThemeSystem": "System",
@@ -107,5 +108,11 @@
     "CommonWarning": "Warning",
     "CommonInfo": "Information",
     "CommonExport": "Export",
-    "CommonImport": "Import"
+    "CommonImport": "Import",
+    "Support.Title": "Support the Project",
+    "Support.Description": "License Generator is completely free. If you find it useful and want to support its development, you can do so optionally. Your support helps maintain and improve the project.",
+    "Support.Button": "Support on Buy Me a Coffee",
+    "Support.OpenError": "Error opening support link.",
+    "Docs.RepositoryButton": "View documentation and integration examples on GitHub",
+    "Repository.OpenError": "Error opening GitHub documentation."
 }

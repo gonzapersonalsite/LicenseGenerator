@@ -41,6 +41,7 @@
     "SettingsDescription": "Elige cómo quieres que se vea License Generator.",
     "SettingsInfoTitle": "Información",
     "SettingsInfoContent": "Esta aplicación utiliza AppData para almacenar de forma segura tus claves RSA y el historial de licencias emitidas. Asegúrate de realizar copias de seguridad periódicas de tu carpeta de datos.",
+    "Docs.ImplementationHint": "Para integrar correctamente este generador con tus aplicaciones cliente (validación de licencias, uso de la clave pública, etc.), consulta la documentación técnica y los ejemplos de código en el repositorio oficial:",
     "ThemeLight": "Claro",
     "ThemeDark": "Oscuro",
     "ThemeSystem": "Sistema",
@@ -107,5 +108,11 @@
     "CommonWarning": "Aviso",
     "CommonInfo": "Información",
     "CommonExport": "Exportar",
-    "CommonImport": "Importar"
+    "CommonImport": "Importar",
+    "Support.Title": "Apoyar el Proyecto",
+    "Support.Description": "License Generator es completamente gratuito. Si te resulta útil y quieres apoyar su desarrollo, puedes hacerlo de forma opcional. Tu apoyo ayuda a mantener y mejorar el proyecto.",
+    "Support.Button": "Apoyar en Buy Me a Coffee",
+    "Support.OpenError": "Error al abrir el enlace de apoyo.",
+    "Docs.RepositoryButton": "Ver documentación y ejemplos de integración en GitHub",
+    "Repository.OpenError": "Error al abrir la documentación en GitHub."
 }

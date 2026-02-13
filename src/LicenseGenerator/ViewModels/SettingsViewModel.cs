@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System;
+using System.Diagnostics;
 
 namespace LicenseGenerator.ViewModels;
 
@@ -222,6 +223,44 @@ public partial class SettingsViewModel : ViewModelBase
                 System.Diagnostics.Debug.WriteLine($"Import error: {ex}");
                 _notificationService.ShowError(_languageService["CommonError"], _languageService["Backup.ImportError"]);
             }
+        }
+    }
+
+    [RelayCommand]
+    private void OpenSupportLink()
+    {
+        try
+        {
+            var url = "https://buymeacoffee.com/gonzalomartinezgarcia";
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            });
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error opening support link: {ex}");
+            _notificationService.ShowError(_languageService["CommonError"], _languageService["Support.OpenError"]);
+        }
+    }
+
+    [RelayCommand]
+    private void OpenRepositoryLink()
+    {
+        try
+        {
+            var url = "https://github.com/gonzapersonalsite/LicenseGenerator";
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            });
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error opening repository link: {ex}");
+            _notificationService.ShowError(_languageService["CommonError"], _languageService["Repository.OpenError"]);
         }
     }
 }

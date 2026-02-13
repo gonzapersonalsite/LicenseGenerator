@@ -105,10 +105,27 @@
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" 
                         CornerRadius="8"
                         Padding="20">
-                    <StackPanel Spacing="10">
+                    <StackPanel Spacing="12">
                         <TextBlock Text="{DynamicResource SettingsInfoTitle}" FontWeight="SemiBold"/>
                         <TextBlock Text="{DynamicResource SettingsInfoContent}" 
                                    TextWrapping="Wrap" FontSize="{DynamicResource FontSizeSmall}" Opacity="0.8"/>
+
+                        <TextBlock Text="{DynamicResource Docs.ImplementationHint}"
+                                   TextWrapping="Wrap"
+                                   FontSize="{DynamicResource FontSizeSmall}"
+                                   Margin="0,4,0,0"/>
+
+                        <Button Command="{Binding OpenRepositoryLinkCommand}"
+                                Classes="Primary"
+                                HorizontalAlignment="Left"
+                                Padding="16,8"
+                                FontSize="{DynamicResource FontSizeSmall}">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <PathIcon Data="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"
+                                          Width="14" Height="14"/>
+                                <TextBlock Text="{DynamicResource Docs.RepositoryButton}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </Border>
 
@@ -144,6 +161,45 @@
                                     MinWidth="150"
                                     HorizontalContentAlignment="Center"/>
                         </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Support Section -->
+                <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" 
+                        BorderBrush="{DynamicResource ColorPrimary}" 
+                        BorderThickness="2" 
+                        CornerRadius="8"
+                        Padding="20">
+                    <StackPanel Spacing="12">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
+                                      Width="22" Height="22" 
+                                      Foreground="{DynamicResource ColorPrimary}"/>
+                            <TextBlock Text="{DynamicResource Support.Title}" 
+                                       FontSize="{DynamicResource FontSizeLarge}" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource ColorPrimary}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                        
+                        <TextBlock Text="{DynamicResource Support.Description}" 
+                                   FontSize="{DynamicResource FontSizeNormal}" 
+                                   TextWrapping="Wrap"
+                                   Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                                   Margin="0,0,0,5"/>
+                        
+                        <Button Command="{Binding OpenSupportLinkCommand}" 
+                                Classes="Primary"
+                                HorizontalAlignment="Left"
+                                Padding="20,10"
+                                FontWeight="SemiBold"
+                                FontSize="{DynamicResource FontSizeMedium}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <PathIcon Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
+                                          Width="18" Height="18"/>
+                                <TextBlock Text="{DynamicResource Support.Button}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </Border>
 
