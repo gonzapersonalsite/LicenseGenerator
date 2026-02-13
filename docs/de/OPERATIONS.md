@@ -1,4 +1,4 @@
-[🇪🇸 Español](../es/OPERATIONS.md) | [🇺🇸 English](../../OPERATIONS.md) | 🇩🇪 **Deutsch**
+[🇪🇸 Español](../es/OPERATIONS.md) | [🇺🇸 English](../../OPERATIONS.md) | 🇩🇪 **Deutsch** | [🇧🇷 Português](../pt/OPERATIONS.md)
 
 # 📔 LicenseGenerator Betriebs- und Integrationsanleitung
 

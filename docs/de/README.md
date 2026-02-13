@@ -1,4 +1,4 @@
-[🇪🇸 Español](../es/README.md) | [🇺🇸 English](../../README.md) | 🇩🇪 **Deutsch**
+[🇪🇸 Español](../es/README.md) | [🇺🇸 English](../../README.md) | 🇩🇪 **Deutsch** | [🇧🇷 Português](../pt/README.md)
 
 # 🗝️ License Generator
 
