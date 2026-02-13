@@ -90,7 +90,7 @@ public partial class SettingsViewModel : ViewModelBase
         SelectedFontSize = FontSizes.FirstOrDefault(f => f.Value == _settingsService.FontSizeScaling) ?? FontSizes[1]; // Default 1.0
         
         // Match the language from service (which already handled system/saved logic)
-        SelectedLanguage = Languages.FirstOrDefault(l => l.Value == _languageService.CurrentLanguage) ?? Languages.FirstOrDefault();
+        SelectedLanguage = Languages.FirstOrDefault(l => l.Value == _languageService.CurrentLanguage) ?? Languages.First();
     }
 
     partial void OnSelectedThemeChanged(SettingsOption<string> value)
