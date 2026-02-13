@@ -1,4 +1,4 @@
-[🇪🇸 Español](../es/ARCHITECTURE.md) | [🇺🇸 English](../../ARCHITECTURE.md) | [🇩🇪 Deutsch](../de/ARCHITECTURE.md) | 🇧🇷 **Português**
+[🇪🇸 Español](../es/ARCHITECTURE.md) | [🇺🇸 English](../../ARCHITECTURE.md) | [🇩🇪 Deutsch](../de/ARCHITECTURE.md) | 🇧🇷 **Português** | [🇨🇳 中文](../zh/README.md)
 
 # 🏗️ Arquitetura do Sistema: Ecossistema de Licenças
 

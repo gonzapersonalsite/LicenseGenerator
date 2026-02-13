@@ -1,4 +1,4 @@
-[🇪🇸 Español](../es/ARCHITECTURE.md) | [🇺🇸 English](../../ARCHITECTURE.md) | 🇩🇪 **Deutsch** | [🇧🇷 Português](../pt/ARCHITECTURE.md)
+[🇪🇸 Español](../es/ARCHITECTURE.md) | [🇺🇸 English](../../ARCHITECTURE.md) | 🇩🇪 **Deutsch** | [🇧🇷 Português](../pt/ARCHITECTURE.md) | [🇨🇳 中文](../zh/README.md)
 
 # 🏗️ Systemarchitektur: Lizenz-Ökosystem
 

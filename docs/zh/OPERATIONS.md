@@ -1,71 +1,71 @@
-[🇪🇸 Español](docs/es/OPERATIONS.md) | 🇺🇸 **English** | [🇩🇪 Deutsch](docs/de/OPERATIONS.md) | [🇧🇷 Português](docs/pt/OPERATIONS.md) | [🇨🇳 中文](docs/zh/README.md)
+[🇪🇸 Español](../es/OPERATIONS.md) | [🇺🇸 English](../../OPERATIONS.md) | [🇩🇪 Deutsch](../de/OPERATIONS.md) | [🇧🇷 Português](../pt/OPERATIONS.md) | 🇨🇳 **中文**
 
-# 📔 LicenseGenerator Operations and Integration Guide
+# 📔 LicenseGenerator 操作与集成指南
 
-This guide is the complete manual for operating the Generator and, above all, for **integrating the licensing system into your own applications** professionally — regardless of the programming language you use.
+本指南是操作生成器，尤其是**将许可证系统集成到您自己的应用程序中**的完整手册 —— 无论您使用何种编程语言。
 
 > [!TIP]
-> **The Big Advantage**: This system is designed for developers who do not want (or cannot) maintain a complex server infrastructure. It allows you to manage and sell licenses for **all your apps** simply, organized, and completely offline. No external databases, no APIs, no monthly maintenance costs. Just you and your keys.
+> **主要优势**: 本系统专为那些不想（或不能）维护复杂服务器基础设施的开发者设计。它允许您简单、有条理且完全离线地管理和销售**所有 App** 的许可证。没有外部数据库，没有 API，没有月度维护成本。只有您和您的密钥。
 
 ---
 
-## 🔄 Flow Overview
+## 🔄 流程概览
 
-For a licensing system to work, the **Generator** (your admin tool) and the **Client** (the end-user app) must be synchronized via RSA cryptography. They only need to share **one thing**: the public key.
+为了使许可证系统工作，**生成器** (您的管理工具) 和 **客户端** (终端用户的 App) 必须通过 RSA 加密进行同步。它们只需要共享**一样东西**: 公钥。
 
 ```mermaid
 graph TD
-    A[Generator: Create App] -->|Generates RSA pair| B(public.pem / private.pem)
-    B -->|Copy public.pem| C[Client App: Hardcode Key]
-    D[Client App: Get HWID] -->|Send to Developer| E[Generator: Issue License]
-    E -->|Sign with private.pem| F(Base64 License Code)
-    F -->|Send to Client| G[Client App: Activate]
-    G -->|Validate with public.pem| H{Valid?}
-    H -->|Yes| I[Access Authorized]
-    H -->|No| J[Access Denied]
+    A[生成器: 创建 App] -->|生成 RSA 密钥对| B(public.pem / private.pem)
+    B -->|复制 public.pem| C[客户端 App: 硬编码密钥]
+    D[客户端 App: 获取 HWID] -->|发送给开发者| E[生成器: 颁发许可证]
+    E -->|用 private.pem 签名| F(Base64 许可证代码)
+    F -->|发送给客户| G[客户端 App: 激活]
+    G -->|用 public.pem 验证| H{有效?}
+    H -->|是| I[授权访问]
+    H -->|否| J[拒绝访问]
 ```
 
-**Why does it work?** Because the private key (which only you have) signs the data, and the public key (which you embed in your app) can only **verify** that signature, never create it. A pirate would need your private key to generate valid licenses for your app — and that key never leaves your computer.
+**原理**: 私钥（只有您拥有）对数据进行签名，公钥（您嵌入到 App 中）只能**验证**该签名，而无法创建签名。盗版者需要您的私钥才能为您的 App 生成有效许可证 —— 而该密钥从未离开您的电脑。
 
 ---
 
-## 🛠 Phase 1: Preparation in the Generator
+## 🛠 第一阶段: 生成器准备
 
-Before touching a single line of code in your application, you must register it in the Generator. This tells the system: "I'm going to need licenses for this product."
+在开始编写应用程序代码之前，您必须在生成器中注册它。这相当于告诉系统：“我需要这个产品的许可证。”
 
-1.  **Start the Generator**: Open the `LicenseGenerator` application.
-2.  **App Management**: Go to the corresponding tab and create a new entry with a descriptive **AppID** (e.g., `MySuperApp`). This name is important — it links the licenses to your product.
-3.  **The Export Moment**: As soon as you press "Create App", the tool automatically does the following:
-    -   Generates a unique **2048-bit** RSA key pair for that App.
-    -   **EXPORTS** the PEM files to the folder:
+1.  **启动生成器**: 打开 `LicenseGenerator` 应用程序。
+2.  **应用管理**: 转到相应选项卡并创建一个新条目，使用描述性的 **AppID** (例如: `MySuperApp`)。这个名称很重要 —— 它将把许可证与您的产品联系起来。
+3.  **导出时刻**: 点击 "创建 App" 后，工具会自动执行以下操作：
+    -   为该 App 生成唯一的 **2048 位** RSA 密钥对。
+    -   **导出** PEM 文件到文件夹：
         `%LocalAppData%\LicenseGenerator\Keys\MySuperApp\`
-4.  **Locate your Public Key**: Open the `public.pem` file that just appeared in that folder. **This is the key your app will use to verify that the licenses are yours.** Don't lose it — although if you do, you can always copy it again from that path.
+4.  **找到您的公钥**: 打开刚刚在该文件夹中出现的 `public.pem` 文件。**这是您的 App 用来验证许可证是否属于您的密钥。** 别弄丢了 —— 尽管如果丢失，您可以随时从该路径再次复制。
 
 > [!CAUTION]
-> **Never distribute the `private.pem` file.** It is your private key. If someone gets it, they can generate valid licenses for your app. Treat it like a master password.
+> **切勿分发 `private.pem` 文件。** 这是您的私钥。如果有人获得了它，他们就能为您的 App 生成有效许可证。请像对待主密码一样对待它。
 
 ---
 
-## 📋 Centralized Management per Application
+## 📋 基于 App 的集中管理
 
-**License Generator** acts as your centralized control panel for all your products:
+**License Generator** 充当您所有产品的集中控制面板：
 
--   **Isolation**: Every application you register works as a watertight compartment. It has its own RSA keys and its own license history. The keys for `MySuperApp` have no relation to those of `OtherApp`.
--   **Tracking**: In the **History** tab, you can filter by application to see exactly who has an active license, when it was issued, and when it expires.
--   **Customer Support**: If a user has trouble with their license, simply search for their name or HWID in the history to resend their code. And if they changed computers (loss, theft, upgrade), you simply generate a new license with their new HWID — no intermediate servers, no complications, and no cost.
--   **State Control**: Being an offline system, the "state" of a license in the generator is an administrative record. The client application only verifies the signature locally — it doesn't need internet to check if its license is valid.
+-   **隔离**: 您注册的每个应用程序都像一个密封舱。它有自己的 RSA 密钥和许可证历史记录。`MySuperApp` 的密钥与 `OtherApp` 无关。
+-   **追踪**: 在 **历史记录** 选项卡中，您可以按应用程序筛选，查看谁拥有有效许可证，何时颁发以及何时过期。
+-   **客户支持**: 如果用户在许可证上遇到问题，只需在历史记录中搜索其名称或 HWID 即可重新发送代码。如果他们更换了电脑（丢失、被盗、升级），只需用新的 HWID 生成新许可证即可 —— 无需中间服务器，无复杂操作，无成本。
+-   **状态控制**: 作为一个离线系统，生成器中的许可证“状态”是一个行政记录。客户端应用程序仅在本地验证签名 —— 不需要互联网来检查许可证是否有效。
 
 ---
 
-## 💻 Phase 2: Client Integration
+## 💻 第二阶段: 客户端集成
 
-This is the crucial part. This is where your application learns to verify licenses. The process is the same regardless of language: you need 3 fundamental pieces.
+这是关键部分。在这里，您的应用程序将学会验证许可证。无论语言如何，过程都是一样的：您需要 3 个基础组件。
 
-### Piece 1: The Data Contract (`LicenseData`)
+### 组件 1: 数据合约 (`LicenseData`)
 
-This is the structure representing a license. **It must be identical in the Generator and in your app.** It is the "contract" between both sides.
+这是表示许可证的结构。**它必须在生成器和您的 App 中完全一致。** 这是双方之间的“合约”。
 
-The most critical part is the `GetDataToSign()` method: it generates the exact string that was signed. If this method produces a different result than the Generator, **the signature will always fail**.
+最关键的是 `GetDataToSign()` 方法：它生成被签名的确切字符串。如果此方法产生的结果与生成器不同，**验证将永远失败**。
 
 ````tabs
 ```tab=C# (.NET 6+)
@@ -77,7 +77,7 @@ public class LicenseData
     public DateTime? ExpirationDate { get; set; }
     public string Signature { get; set; } = string.Empty;
 
-    // CRITICAL: This method must be IDENTICAL in Generator and Client
+    // 关键: 此方法必须与生成器中的完全一致
     public string GetDataToSign()
     {
         var dateStr = ExpirationDate?.ToString("yyyy-MM-dd") ?? "NEVER";
@@ -96,13 +96,13 @@ class LicenseData:
     AppId: str = ""
     RegistrationName: str = ""
     HardwareId: str = ""
-    ExpirationDate: Optional[str] = None  # format "yyyy-MM-ddTHH:mm:ss"
+    ExpirationDate: Optional[str] = None  # 格式 "yyyy-MM-ddTHH:mm:ss"
     Signature: str = ""
 
     def get_data_to_sign(self) -> str:
-        """CRITICAL: Must produce the same string as the C# Generator"""
+        """关键: 必须生成与 C# 生成器相同的字符串"""
         if self.ExpirationDate:
-            # Parse ISO date and extract only yyyy-MM-dd
+            # 解析 ISO 日期并仅提取 yyyy-MM-dd
             date_str = datetime.fromisoformat(self.ExpirationDate).strftime("%Y-%m-%d")
         else:
             date_str = "NEVER"
@@ -118,7 +118,7 @@ class LicenseData {
         this.Signature = data.Signature || '';
     }
 
-    // CRITICAL: Must produce the same string as the C# Generator
+    // 关键: 必须生成与 C# 生成器相同的字符串
     getDataToSign() {
         let dateStr = 'NEVER';
         if (this.ExpirationDate) {
@@ -132,19 +132,19 @@ class LicenseData {
 ````
 
 > [!IMPORTANT]
-> **The Golden Rule**: `GetDataToSign()` must produce **exactly** the string `AppId|Name|HWID|yyyy-MM-dd` (or `NEVER`). A single character difference (a space, a capital letter, a different date format) will make the signature invalid. The separator is always `|`.
+> **黄金法则**: `GetDataToSign()` 必须生成 **完全精确** 的字符串 `AppId|Name|HWID|yyyy-MM-dd` (或 `NEVER`)。哪怕一个字符的差异（空格、大写、日期格式），都会导致签名无效。分隔符永远是 `|`。
 
 ---
 
-### Piece 2: The Hardware Identifier (HWID)
+### 组件 2: 硬件标识符 (HWID)
 
-The HWID is what prevents a user from copying their license to another PC. The idea is simple: your app generates a unique identifier based on the computer hardware, and that identifier is included inside the signature. If the license travels to another PC, the HWID will not match.
+HWID 用于防止用户将许可证复制到另一台 PC。思路很简单：您的 App 生成一个基于硬件的唯一 ID，该 ID 被包含在签名中。如果许可证到了另一台 PC，HWID 将不匹配。
 
-**You can use whatever method you want** to generate the HWID, but it must follow two rules:
-1.  **Deterministic**: The same machine always generates the same ID.
-2.  **Identical**: The format your app shows the user (to send to you) must be exactly the one used later to validate.
+**您可以使用任何方法**生成 HWID，但必须遵循两条规则：
+1.  **确定性**: 同一台机器总是生成相同的 ID。
+2.  **一致性**: 您的 App 显示给用户（用于发送给您）的格式，必须与后面用于验证的格式完全一致。
 
-The Generator does not enforce any HWID format — it simply signs what it receives. **You decide how to generate it.**
+生成器不强制要求任何 HWID 格式 —— 它只是对接收到的内容进行签名。**由您决定如何生成它。**
 
 ````tabs
 ```tab=C# (.NET — Windows + Linux)
@@ -156,13 +156,13 @@ public string GetMachineId()
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            // Windows: MachineGuid from registry (unique per Windows installation)
+            // Windows: 注册表中的 MachineGuid (每次安装 Windows 唯一)
             using var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Cryptography");
             id = key?.GetValue("MachineGuid")?.ToString() ?? string.Empty;
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            // Linux: /etc/machine-id is standard in systemd
+            // Linux: /etc/machine-id 是 systemd 标准
             if (File.Exists("/etc/machine-id"))
                 id = File.ReadAllText("/etc/machine-id").Trim();
             else if (File.Exists("/var/lib/dbus/machine-id"))
@@ -170,7 +170,7 @@ public string GetMachineId()
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            // macOS: IOPlatformSerialNumber via ioreg
+            // macOS: 通过 ioreg 获取 IOPlatformSerialNumber
             var p = Process.Start(new ProcessStartInfo("ioreg", "-rd1 -c IOPlatformExpertDevice")
                 { RedirectStandardOutput = true, UseShellExecute = false });
             var output = p?.StandardOutput.ReadToEnd() ?? "";
@@ -180,7 +180,7 @@ public string GetMachineId()
 
         if (string.IsNullOrEmpty(id)) return "GENERIC-HWID";
 
-        // Friendly format: first 8 chars, uppercase
+        // 友好格式: 前 8 个字符，大写
         return id.Replace("-", "").Substring(0, 8).ToUpper();
     }
     catch { return "UNKNOWN-HWID"; }
@@ -190,7 +190,7 @@ public string GetMachineId()
 import platform, subprocess, re, uuid
 
 def get_machine_id() -> str:
-    """Gets an 8-char HWID from current machine."""
+    """获取当前计算机的 8 字符 HWID。"""
     system = platform.system()
     raw_id = ""
 
@@ -212,7 +212,7 @@ def get_machine_id() -> str:
             raw_id = match.group(1)
 
     if not raw_id:
-        raw_id = str(uuid.getnode())  # Fallback: MAC address
+        raw_id = str(uuid.getnode())  # 备选: MAC 地址
 
     return raw_id.replace("-", "")[:8].upper()
 ```
@@ -225,7 +225,7 @@ function getMachineId() {
     let rawId = '';
 
     if (process.platform === 'win32') {
-        // Windows: reads MachineGuid from registry
+        // Windows: 从注册表读取 MachineGuid
         const output = execSync(
             'reg query HKLM\\SOFTWARE\\Microsoft\\Cryptography /v MachineGuid'
         ).toString();
@@ -242,28 +242,28 @@ function getMachineId() {
         if (match) rawId = match[1];
     }
 
-    if (!rawId) rawId = os.hostname(); // Fallback
+    if (!rawId) rawId = os.hostname(); // 备选
     return rawId.replace(/-/g, '').substring(0, 8).toUpperCase();
 }
 ```
 ````
 
 > [!NOTE]
-> **Why 8 characters?** Just for usability. A full GUID like `a8c3f1e2-b456-7890-cdef-1234567890ab` is hard to dictate over the phone or type. The first 8 characters (`A8C3F1E2`) are enough to differentiate millions of computers and the user can easily copy them.
+> **为什么是 8 个字符?** 纯粹为了易用性。一个完整的 GUID 如 `a8c3f1e2-b456-7890-cdef-1234567890ab` 很难在电话里念出来或输入。前 8 个字符 (`A8C3F1E2`) 足以区分数以百万计的计算机，用户也很容易复制。
 
 ---
 
-### Piece 3: The License Service (Complete)
+### 组件 3: 许可证服务 (完整版)
 
-This is where everything comes together. This is the complete service your app needs, with 4 essential functions:
+这就是汇聚一切的地方。您的 App 需要这 4 个核心功能：
 
-1.  **`GetMachineId()`** — To show the user their HWID so they can send it to you.
-2.  **`Activate(code)`** — To decode and validate the Base64 you deliver to the client.
-3.  **`IsLicensed()`** — To quickly check if there is an active license (called on startup).
-4.  **`Validate(license)`** — The RSA cryptographic verification itself.
+1.  **`GetMachineId()`** — 向用户展示 HWID 以便发送给您。
+2.  **`Activate(code)`** — 解码并验证您发给客户的 Base64 代码。
+3.  **`IsLicensed()`** — 快速检查是否有有效许可证（启动 App 时调用）。
+4.  **`Validate(license)`** — RSA 加密验证逻辑。
 
 ````tabs
-```tab=C# (.NET 6+) — Complete Implementation
+```tab=C# (.NET 6+) — 完整实现
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -278,25 +278,25 @@ public interface ILicenseService
 
 public class LicenseService : ILicenseService
 {
-    private const string AppId = "MySuperApp";     // Must match ID in Generator
+    private const string AppId = "MySuperApp";     // 必须与生成器中的 ID 匹配
     private const string LicenseFileName = "license.lic";
 
-    // PASTED FROM public.pem EXPORTED BY GENERATOR
+    // 从生成器导出的 public.pem 文件内容粘贴至此
     private const string PublicKeyPem = @"-----BEGIN PUBLIC KEY-----
-HERE_GOES_YOUR_FULL_PUBLIC_KEY
+YOUR_FULL_PUBLIC_KEY_HERE
 WITH_HEADERS_AND_EVERYTHING
 -----END PUBLIC KEY-----";
 
     private LicenseData? _cachedLicense;
 
     // ══════════════════════════════════════════════════════════════
-    // 1. CHECK: Is there a valid license? (Call on startup)
+    // 1. 检查: 是否有有效许可证? (启动时调用)
     // ══════════════════════════════════════════════════════════════
     public bool IsLicensed()
     {
         if (_cachedLicense != null) return true;
 
-        // Try load from disk (if already activated)
+        // 尝试从磁盘加载 (如果之前已激活)
         var license = LoadFromFile();
         if (license != null && Validate(license))
         {
@@ -307,46 +307,46 @@ WITH_HEADERS_AND_EVERYTHING
     }
 
     // ══════════════════════════════════════════════════════════════
-    // 2. ACTIVATE: User pastes Base64 code you sent
+    // 2. 激活: 用户粘贴您发送的 Base64 代码
     // ══════════════════════════════════════════════════════════════
     public bool Activate(string licenseKey)
     {
         try
         {
-            // Generator produces: Base64 → containing JSON → containing data
+            // 生成器生成: Base64 → 里面是 JSON → 里面是数据
             var json = Encoding.UTF8.GetString(Convert.FromBase64String(licenseKey));
             var license = JsonSerializer.Deserialize<LicenseData>(json);
 
             if (license != null && Validate(license))
             {
-                SaveToFile(licenseKey);       // Persist for next startups
+                SaveToFile(licenseKey);       // 持久化保存以便下次启动
                 _cachedLicense = license;
                 return true;
             }
         }
-        catch { /* Invalid format — code corrupt or copied wrong */ }
+        catch { /* 格式无效 — 代码被破坏或复制错误 */ }
         return false;
     }
 
     public LicenseData? GetCurrentLicense() => _cachedLicense;
 
     // ══════════════════════════════════════════════════════════════
-    // 3. VALIDATE: RSA Cryptographic Verification
+    // 3. 验证: RSA 加密验证
     // ══════════════════════════════════════════════════════════════
     private bool Validate(LicenseData license)
     {
-        // Is it for this app?
+        // 是给这个 App 的吗?
         if (license.AppId != AppId) return false;
 
-        // Does hardware match?
+        // 硬件是否匹配?
         if (license.HardwareId != GetMachineId()) return false;
 
-        // Expired?
+        // 是否过期?
         if (license.ExpirationDate.HasValue && license.ExpirationDate < DateTime.Now) return false;
 
         try
         {
-            // RSA signature: import public key and verify
+            // RSA 签名验证: 导入公钥并验证
             using var rsa = RSA.Create();
             rsa.ImportFromPem(PublicKeyPem);
 
@@ -359,15 +359,15 @@ WITH_HEADERS_AND_EVERYTHING
     }
 
     // ══════════════════════════════════════════════════════════════
-    // 4. HWID: Unique PC Identity (see previous section)
+    // 4. HWID: PC 唯一标识 (见上一节)
     // ══════════════════════════════════════════════════════════════
     public string GetMachineId()
     {
-        // ... (use implementation from previous section)
+        // ... (使用上一节的代码)
     }
 
     // ══════════════════════════════════════════════════════════════
-    // Persistence: Save/Load from disk
+    // 持久化: 保存/加载文件
     // ══════════════════════════════════════════════════════════════
     private void SaveToFile(string licenseKey)
     {
@@ -391,33 +391,33 @@ WITH_HEADERS_AND_EVERYTHING
     {
         var dir = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            AppId  // Each app saves its license in its own folder
+            AppId  // 每个 App 将许可证保存在此文件夹
         );
         if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
         return Path.Combine(dir, LicenseFileName);
     }
 }
 ```
-```tab=Python — Complete Implementation
+```tab=Python — 完整实现
 import base64, json, os, platform
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding, utils
 
-# pip install cryptography
+# 需要: pip install cryptography
 
 APP_ID = "MySuperApp"
 LICENSE_FILE = "license.lic"
 
-# PASTED FROM public.pem EXPORTED BY GENERATOR
+# 从生成器导出的 public.pem 文件内容
 PUBLIC_KEY_PEM = """-----BEGIN PUBLIC KEY-----
-HERE_GOES_YOUR_FULL_PUBLIC_KEY
+YOUR_FULL_PUBLIC_KEY_HERE
 WITH_HEADERS_AND_EVERYTHING
 -----END PUBLIC KEY-----"""
 
 _cached_license = None
 
 def get_license_path() -> str:
-    """Path where activated license is saved."""
+    """激活的许可证保存路径。"""
     if platform.system() == "Windows":
         base = os.environ.get("LOCALAPPDATA", os.path.expanduser("~"))
     else:
@@ -427,7 +427,7 @@ def get_license_path() -> str:
     return os.path.join(directory, LICENSE_FILE)
 
 def validate(license: 'LicenseData') -> bool:
-    """Full RSA cryptographic verification."""
+    """完整的 RSA 加密验证。"""
     if license.AppId != APP_ID:
         return False
     if license.HardwareId != get_machine_id():
@@ -452,7 +452,7 @@ def validate(license: 'LicenseData') -> bool:
         return False
 
 def activate(license_key: str) -> bool:
-    """Decodes Generator Base64, validates, and persists."""
+    """解码生成器的 Base64，验证并持久化。"""
     global _cached_license
     try:
         json_str = base64.b64decode(license_key).decode("utf-8")
@@ -468,7 +468,7 @@ def activate(license_key: str) -> bool:
     return False
 
 def is_licensed() -> bool:
-    """Checks if there is a valid license (on app startup)."""
+    """检查是否有有效许可证 (App 启动时)。"""
     global _cached_license
     if _cached_license:
         return True
@@ -487,7 +487,7 @@ def is_licensed() -> bool:
         pass
     return False
 ```
-```tab=Node.js — Complete Implementation
+```tab=Node.js — 完整实现
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
@@ -496,9 +496,9 @@ const os = require('os');
 const APP_ID = 'MySuperApp';
 const LICENSE_FILE = 'license.lic';
 
-// PASTED FROM public.pem EXPORTED BY GENERATOR
+// 从生成器导出的 public.pem 文件内容
 const PUBLIC_KEY_PEM = `-----BEGIN PUBLIC KEY-----
-HERE_GOES_YOUR_FULL_PUBLIC_KEY
+YOUR_FULL_PUBLIC_KEY_HERE
 WITH_HEADERS_AND_EVERYTHING
 -----END PUBLIC KEY-----`;
 
@@ -559,117 +559,117 @@ function isLicensed() {
 ```
 ````
 
-**What does each part do, step by step?**
+**每个部分是做什么的？**
 
-1.  The Generator produces a JSON with `AppId`, `RegistrationName`, `HardwareId`, `ExpirationDate` and `Signature`, all encoded in **Base64**. That Base64 block is what you send to the client.
-2.  The client **decodes** the Base64 → gets the JSON → deserializes to `LicenseData`.
-3.  The validator **reconstructs** the `GetDataToSign()` string and uses the public key to verify that string was signed by your private key.
-4.  If it passes, a `license.lic` file is saved in the user's AppData so they don't have to activate again every time they open the app.
+1.  生成器生成一个包含 `AppId`, `RegistrationName`, `HardwareId`, `ExpirationDate` 和 `Signature` 的 JSON，所有这些都编码在 **Base64** 中。此 Base64 块是您发送给客户的内容。
+2.  客户端 **解码** Base64 → 获取 JSON → 反序列化为 `LicenseData`。
+3.  验证器 **重建** `GetDataToSign()` 字符串，并使用公钥验证该字符串是否由您的私钥签名。
+4.  如果通过，文件 `license.lic` 将保存在用户的 AppData 中，以便他们不需要每次打开 App 都激活。
 
 ---
 
-## 🎨 Phase 3: Activation Screen in your App
+## 🎨 第三阶段: App 中的激活屏幕
 
-Your app needs a screen where the user can:
-- **See their HWID** (to send it to you).
-- **Paste the license code** you sent them.
-- **Activate** and see the result.
+您的 App 需要一个屏幕，用户可以在其中：
+- **查看他们的 HWID** (以便发送给您)。
+- **粘贴许可证代码** (您发给他们的)。
+- **激活** 并查看结果。
 
-It doesn't matter if your interface is console, web, or desktop. The concept is the same:
+无论您的界面是控制台、Web 还是桌面，概念都是一样的：
 
 ```
 ┌──────────────────────────────────────────────┐
-│           🔑 License Activation              │
+│           🔑 激活许可证 (Activate)           │
 │                                              │
-│  Your Machine ID: [ A8C3F1E2 ]  [📋 Copy]   │
+│  您的机器 ID:   [ A8C3F1E2 ]  [📋 复制]      │
 │                                              │
-│  License Code:                               │
+│  许可证代码:                                 │
 │  ┌──────────────────────────────────────┐    │
-│  │ (User pastes Base64 here)            │    │
+│  │ (用户在此粘贴 Base64 代码)            │    │
 │  └──────────────────────────────────────┘    │
 │                                              │
-│               [ ✅ Activate ]                │
+│               [ ✅ 激活 ]                    │
 │                                              │
-│  Status: ❌ Unlicensed                       │
+│  状态: ❌ 未授权 (Not Licensed)              │
 └──────────────────────────────────────────────┘
 ```
 
-**The end-user flow is:**
-1.  Open your app → see activation screen.
-2.  Copy HWID and send it to you (email, web form, etc.).
-3.  You open Generator → select app → paste HWID → press Generate.
-4.  Send the resulting Base64 code to them.
-5.  Client pastes it in their app → presses Activate → done.
+**最终用户的流程是:**
+1.  打开您的 App → 看到激活屏幕。
+2.  复制 HWID 并将其发送给您（通过电子邮件、Web 表单等）。
+3.  您打开生成器 → 选择 App → 粘贴 HWID → 点击生成。
+4.  将生成的 Base64 代码发回给他们。
+5.  客户端将其粘贴到 App 中 → 点击激活 → 完成。
 
 ---
 
-## 🎫 Phase 4: Issuing Licenses (Your Day-to-Day)
+## 🎫 第四阶段: 颁发许可证 (日常操作)
 
-When a client wants to buy your app, the process is quick:
+当客户想要购买您的 App 时，过程很快：
 
-1.  **Ask for their HWID**: Your client app already has the "Copy ID" button.
-2.  **Open Generator**: Select the corresponding App.
-3.  **Fill in details**:
-    -   **Client**: Buyer's name (for your records).
-    -   **HWID**: The 8-character code they sent you.
-    -   **Expiration**: Pick a date or leave empty for lifetime license.
-4.  **Generate**: Press the button and you get a long Base64 block.
-5.  **Send**: Copy that block and send it to the client however you prefer.
+1.  **索取 HWID**: 您的客户端 App 已经有了 "复制 ID" 的按钮。
+2.  **打开生成器**: 选择相应的 App。
+3.  **填写详情**:
+    -   **客户**: 买家名称 (为您自己记录)。
+    -   **HWID**: 他们发送的 8 字符代码。
+    -   **过期时间**: 选择一个日期，或留空以生成永久许可证。
+4.  **生成**: 点击按钮，您将获得长长的 Base64 块。
+5.  **发送**: 复制该块，并通过您喜欢的方式发送给客户。
 
 > [!NOTE]
-> Each generated license is automatically recorded in the Generator's **History**. You can check it anytime to see how many licenses you've issued, to whom, and when they expire.
+> 每个生成的许可证都会自动注册在生成器的 **历史记录** 中。您可以随时查询以查看您颁发了多少许可证，给谁颁发的，以及何时过期。
 
 ---
 
-## 🚫 Irreversibility and Revocation
+## 🚫 不可逆性与撤销
 
 > [!CAUTION]
-> **Signature is Permanent**: Because this system uses offline asymmetric cryptography, a signed license is technically valid forever (or until expiration) on the client PC, without needing internet.
+> **签名是永久的**: 由于此系统使用离线非对称加密，已签名的许可证在技术上在客户端 PC 上永久有效（或直到过期日期），无需互联网。
 
-**Can I revoke a license I already delivered?**
+**我可以撤销已交付的许可证吗？**
 
--   **Remotely: NO.** Since there is no central server the client checks on startup, you cannot "turn off" a license remotely.
--   **With a blacklist: YES.** You can implement a "Blacklist" in your next app update. If you include a list of revoked signatures in your code, validation can reject those licenses even if the RSA signature is correct.
--   **By major version: YES.** If you change the **Public Key** in a new version (e.g. V1 to V2), all previous licenses will stop working for that version. This is useful for charging for major upgrades.
+-   **远程撤销: 否。** 由于没有客户端在启动时查询的中央服务器，您无法远程“关闭”许可证。
+-   **黑名单 (Blacklist): 是。** 您可以在 App 的下一次更新中实施“黑名单”。如果您在代码中包含已撤销签名的列表，验证逻辑可以拒绝这些许可证，即使 RSA 签名是正确的。
+-   **通过主版本: 是。** 如果您在新版本中更改 **公钥** (例如：从 V1 到 V2)，所有以前的许可证在该版本中都将失效。这对于收费的大版本更新很有用。
 
 ---
 
-## 🌍 Tech Stack Compatibility
+## 🌍 技术栈兼容性
 
-This system is **NOT** limited to .NET / C#. The Generator uses industrial cryptographic standards that any language supports:
+此系统 **不** 局限于 .NET / C#。生成器使用任何语言都支持的工业加密标准：
 
-| Component | Standard Used | Universal? |
+| 组件 | 使用标准 | 通用吗？ |
 |:---|:---|:---|
-| RSA Keys | **PEM (PKCS#8 / SubjectPublicKeyInfo)** | ✅ Yes — global format |
-| Signing Algo | **RSA + SHA256 + PKCS1v15** | ✅ Yes — available in every crypto lib |
-| License Format | **JSON encoded in Base64** | ✅ Yes — depends on nothing .NET |
-| Signature Format | **Base64** | ✅ Yes — universal |
+| RSA 密钥 | **PEM (PKCS#8 / SubjectPublicKeyInfo)** | ✅ 是 — 全球格式 |
+| 签名算法 | **RSA + SHA256 + PKCS1v15** | ✅ 是 — 所有加密库都支持 |
+| 许可证格式 | **Base64 编码的 JSON** | ✅ 是 — 不依赖 .NET |
+| 签名格式 | **Base64** | ✅ 是 — 通用 |
 
-**You can validate licenses in any stack:**
+**您可以在任何技术栈中验证许可证:**
 
-| Language/Stack | RSA/PEM Library | Difficulty |
+| 语言/栈 | RSA/PEM 库 | 难度 |
 |:---|:---|:---|
-| **C# / .NET 6+** | `System.Security.Cryptography` (native) | ⭐ Trivial |
-| **Python** | `cryptography` (pip install) | ⭐ Trivial |
-| **Node.js** | `crypto` (native module) | ⭐ Trivial |
-| **Java / Kotlin** | `java.security` (native) | ⭐⭐ Easy (needs KeyFactory) |
-| **Rust** | `rsa` + `pem` crates | ⭐⭐ Easy |
-| **Go** | `crypto/rsa` (stdlib) | ⭐⭐ Easy |
-| **Swift** | `Security` framework | ⭐⭐ Easy |
-| **Electron / Web** | Node.js `crypto` or Web Crypto API | ⭐⭐ Easy |
+| **C# / .NET 6+** | `System.Security.Cryptography` (原生) | ⭐ 极简 |
+| **Python** | `cryptography` (pip install) | ⭐ 极简 |
+| **Node.js** | `crypto` (原生模块) | ⭐ 极简 |
+| **Java / Kotlin** | `java.security` (原生) | ⭐⭐ 简单 (需要 KeyFactory) |
+| **Rust** | `rsa` + `pem` crates | ⭐⭐ 简单 |
+| **Go** | `crypto/rsa` (stdlib) | ⭐⭐ 简单 |
+| **Swift** | `Security` framework | ⭐⭐ 简单 |
+| **Electron / Web** | Node.js `crypto` 或 Web Crypto API | ⭐⭐ 简单 |
 
 > [!TIP]
-> **The Generator is an administration tool.** It lives on your PC as a desktop app (.NET). But the licenses it produces are **RSA-signed JSON files** — a format any program in any language can read and verify. Your client app can be made in Python, Java, React, Electron, Flutter, or whatever.
+> **生成器只是管理工具。** 它作为一个桌面应用 (.NET) 存在于您的 PC 上。但它生成的许可证是 **RSA 签名的 JSON 文件** —— 任何语言编写的任何程序都能读取和验证。您的客户端 App 可以是用 Python, Java, React, Electron, Flutter 或任何其他技术编写的。
 
 ---
 
-## ⚠️ Troubleshooting
+## ⚠️ 常见问题排查
 
-| Problem | Probable Cause | Solution |
+| 问题 | 可能原因 | 解决方案 |
 | :--- | :--- | :--- |
-| **"Signature Error"** | Public key doesn't match private key used to sign, or `GetDataToSign()` produces different string. | Re-copy full `public.pem` content (with `BEGIN/END` headers). Verify `\|` separators are correct. |
-| **"License not valid on this PC"** | HWID generated on client PC is different from what you entered when signing. | Ensure your app uses **exact same** HWID algorithm the Generator received. Watch out for case sensitivity. |
-| **"License expired"** | Client PC date is after `ExpirationDate`. | Generate new license with extended date. |
-| **"Error importing PEM"** (C#) | Missing `System.Security.Cryptography` or using .NET < 6. | Update to .NET 6+ which includes native `ImportFromPem()`. |
-| **"Error importing PEM"** (Python) | Missing `cryptography` library. | Run `pip install cryptography`. |
-| **License works in dev but not prod** | Published app uses different HWID (e.g. Docker container has different `machine-id`). | Verify production environment allows access to same hardware data. |
+| **"签名错误 (Signature Error)"** | 公钥与用于签名的私钥不匹配，或 `GetDataToSign()` 生成的字符串不同。 | 重新复制完整的 `public.pem` 内容（包括 `BEGIN/END` 头）。检查 `\|` 分隔符是否正确。 |
+| **"许可证在此 PC 无效"** | 客户端 PC 生成的 HWID 与您签名时输入的 HWID 不同。 | 确保您的 App 使用与生成器接收到的**完全相同的 HWID 算法**。注意大小写。 |
+| **"许可证已过期"** | 客户端 PC 的日期晚于 `ExpirationDate`。 | 生成一个日期延长的许可证。 |
+| **"导入 PEM 错误"** (C#) | 缺少 `System.Security.Cryptography` 或使用 .NET < 6。 | 升级到 .NET 6+，它包含原生的 `ImportFromPem()`。 |
+| **"导入 PEM 错误"** (Python) | 缺少 `cryptography` 库。 | 执行 `pip install cryptography`。 |
+| **许可证在开发环境有效但在生产环境无效** | 发布的 App 使用了不同的 HWID (例如：Docker 容器有不同的 `machine-id`)。 | 检查生产环境是否允许访问相同的硬件数据。 |
