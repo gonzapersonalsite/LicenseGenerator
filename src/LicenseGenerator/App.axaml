@@ -1,0 +1,128 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:LicenseGenerator"
+             x:Class="LicenseGenerator.App"
+             RequestedThemeVariant="Dark">
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+
+    <Application.Resources>
+        <SolidColorBrush x:Key="SystemControlErrorTextForegroundBrush" Color="Red"/>
+        
+        <!-- Standard Colors -->
+        <SolidColorBrush x:Key="ColorDanger" Color="#F44336"/>
+        <SolidColorBrush x:Key="ColorSuccess" Color="#4CAF50"/>
+        <SolidColorBrush x:Key="ColorWarning" Color="#FF9800"/>
+        <SolidColorBrush x:Key="ColorPrimary" Color="#2196F3"/>
+        <SolidColorBrush x:Key="ColorNeutral" Color="#757575"/>
+        <SolidColorBrush x:Key="ColorWhite" Color="#FFFFFF"/>
+
+        <!-- Font Sizes -->
+        <x:Double x:Key="FontSizeTiny">10</x:Double>
+        <x:Double x:Key="FontSizeSmall">12</x:Double>
+        <x:Double x:Key="FontSizeNormal">14</x:Double>
+        <x:Double x:Key="FontSizeMedium">16</x:Double>
+        <x:Double x:Key="FontSizeLarge">18</x:Double>
+        <x:Double x:Key="FontSizeExtraLarge">24</x:Double>
+        <x:Double x:Key="FontSizeHuge">28</x:Double>
+        <x:Double x:Key="FontSizeExtraHuge">36</x:Double>
+
+        <!-- Navigation Icons -->
+        <StreamGeometry x:Key="LineHorizontal3Regular">M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z</StreamGeometry>
+        <StreamGeometry x:Key="HomeRegular">M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z</StreamGeometry>
+        <StreamGeometry x:Key="AppsRegular">M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z</StreamGeometry>
+        <StreamGeometry x:Key="KeyRegular">M7 11c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-4c-2.76 0-5 2.24-5 5h3c0-1.1.9-2 2-2s2 .9 2 2c0 .31-.08.59-.22.84l-2.71 4.54c-.16.27-.08.61.18.77l.79.47c.27.16.61.08.77-.18l2.58-4.32c.38-.64.61-1.38.61-2.17 0-2.76-2.24-5-5-5z</StreamGeometry>
+        <StreamGeometry x:Key="HistoryRegular">M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z</StreamGeometry>
+        <StreamGeometry x:Key="SettingsRegular">M12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7zM19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65A.488.488 0 0 0 14 3h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.31.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65z</StreamGeometry>
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+        <StyleInclude Source="avares://LicenseGenerator/Styles/PaginatedListStyle.axaml"/>
+
+        <!-- Default Window Font Size -->
+        <Style Selector="Window">
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
+        </Style>
+
+        <Style Selector="Button">
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
+        </Style>
+
+        <!-- DataGrid Font Sizes -->
+        <Style Selector="DataGrid">
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
+        </Style>
+        <Style Selector="DataGridColumnHeader">
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeSmall}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style Selector="DataGridColumnHeader TextBlock">
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeSmall}"/>
+        </Style>
+        <Style Selector="DataGridCell">
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
+        </Style>
+        <Style Selector="DataGridCell TextBlock">
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
+        </Style>
+
+        <!-- General Inputs -->
+        <Style Selector="TextBox">
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
+        </Style>
+        <Style Selector="ComboBoxItem">
+            <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
+        </Style>
+
+        <!-- Primary (Blue) -->
+        <Style Selector="Button.Primary">
+            <Setter Property="Background" Value="{DynamicResource ColorPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ColorWhite}"/>
+        </Style>
+        <Style Selector="Button.Primary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ColorPrimary}"/>
+            <Setter Property="Opacity" Value="0.9"/>
+            <Setter Property="Foreground" Value="{DynamicResource ColorWhite}"/>
+        </Style>
+
+        <!-- Success (Green) -->
+        <Style Selector="Button.Success">
+            <Setter Property="Background" Value="{DynamicResource ColorSuccess}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ColorWhite}"/>
+        </Style>
+        <Style Selector="Button.Success:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ColorSuccess}"/>
+            <Setter Property="Opacity" Value="0.9"/>
+            <Setter Property="Foreground" Value="{DynamicResource ColorWhite}"/>
+        </Style>
+
+        <!-- Danger (Red) -->
+        <Style Selector="Button.Danger">
+            <Setter Property="Background" Value="{DynamicResource ColorDanger}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ColorWhite}"/>
+        </Style>
+        <Style Selector="Button.Danger:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ColorDanger}"/>
+            <Setter Property="Opacity" Value="0.9"/>
+            <Setter Property="Foreground" Value="{DynamicResource ColorWhite}"/>
+        </Style>
+
+        <!-- Secondary (Outline) -->
+        <Style Selector="Button.Secondary">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource ColorNeutral}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ColorNeutral}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="Button.Secondary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ColorNeutral}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ColorWhite}"/>
+        </Style>
+    </Application.Styles>
+</Application>
