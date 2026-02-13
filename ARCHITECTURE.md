@@ -72,6 +72,20 @@ LicenseGenerator/
 │       └── ...
 └── History.json      (Registro de licencias emitidas)
 ```
+---
+
+## ⚖️ Modelo Legal y de Uso
+
+A diferencia de muchas utilidades de seguridad, el **License Generator** no es un proyecto de código abierto sin restricciones.
+
+1. **Propiedad Intelectual**: El diseño de los algoritmos de firma y la arquitectura del generador son propiedad del autor.
+2. **Licencia EULA**: El software se rige por un Contrato de Licencia de Usuario Final ([LICENSE](LICENSE)) que permite el uso personal pero prohíbe la explotación comercial o modificación por terceros.
+3. **Responsabilidad**: El autor no se hace responsable del uso que se le dé a las licencias generadas ni de la seguridad de las aplicaciones que las integren.
+
+> [!IMPORTANT]
+> Al utilizar esta herramienta, el desarrollador acepta que es responsable de la custodia de sus llaves privadas y de la correcta implementación del lado cliente.
+
+---
 
 > [!NOTE]
 > Este diseño permite actualizar el generador sin tocar nunca tus llaves maestras ni perder el historial de tus clientes.

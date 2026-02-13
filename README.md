@@ -52,4 +52,13 @@ Para una integración exitosa, consulta estos manuales detallados:
 
 ---
 
+## 📜 Licencia
+
+Este software se distribuye bajo un contrato de licencia de usuario final (**EULA**) personalizado. 
+- Se permite el uso personal e interno sin coste.
+- Queda prohibida la redistribución comercial, modificación o ingeniería inversa del código fuente.
+- Consulta el archivo [LICENSE](LICENSE) para ver los términos completos.
+
+---
+
 *Desarrollado con ❤️ para empoderar a los creadores de software.*
