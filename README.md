@@ -2,6 +2,8 @@
 
 [![.NET 8.0](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/download)
 [![Avalonia UI](https://img.shields.io/badge/Avalonia-11.2-ff69b4?logo=avaloniaui)](https://avaloniaui.net/)
+[![License](https://img.shields.io/badge/License-Custom%20EULA-blue)](LICENSE)
+[![Docs](https://img.shields.io/badge/Docs-OPERATIONS.md-success)](OPERATIONS.md)
 
 **License Generator** es una potente utilidad de escritorio diseñada para que desarrolladores independientes gestionen el ciclo de vida completo de sus licencias de software de forma autónoma, segura y offline.
 
