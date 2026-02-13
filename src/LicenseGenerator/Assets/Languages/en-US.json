@@ -52,6 +52,8 @@
     "LangSpanish": "Spanish",
     "LangEnglish": "English",
     "LangGerman": "German",
+    "LangPortuguese": "Portuguese",
+    "LangChinese": "Chinese",
     "SettingsResetBtn": "Reset Settings",
     "SettingsResetConfirmTitle": "Reset Settings?",
     "SettingsResetInfo": "Are you sure? This will restore the theme, font size, and language to their factory default values.",

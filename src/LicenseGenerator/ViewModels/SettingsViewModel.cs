@@ -78,6 +78,8 @@ public partial class SettingsViewModel : ViewModelBase
                 "es-ES" => "LangSpanish",
                 "en-US" => "LangEnglish",
                 "de-DE" => "LangGerman",
+                "pt-BR" => "LangPortuguese",
+                "zh-CN" => "LangChinese",
                 _ => langCode // Fallback to the code itself for new languages
             };
             Languages.Add(new SettingsOption<string>(langCode, labelKey));

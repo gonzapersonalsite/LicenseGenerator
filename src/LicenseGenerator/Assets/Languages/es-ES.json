@@ -52,6 +52,8 @@
     "LangSpanish": "Español",
     "LangEnglish": "Inglés",
     "LangGerman": "Alemán",
+    "LangPortuguese": "Portugués",
+    "LangChinese": "Chino",
     "SettingsResetBtn": "Restablecer Ajustes",
     "SettingsResetConfirmTitle": "¿Restablecer Ajustes?",
     "SettingsResetInfo": "¿Estás seguro? Esto restaurará el tema, el tamaño de fuente y el idioma a sus valores predeterminados de fábrica.",

@@ -52,6 +52,8 @@
     "LangSpanish": "Spanisch",
     "LangEnglish": "Englisch",
     "LangGerman": "Deutsch",
+    "LangPortuguese": "Portugiesisch",
+    "LangChinese": "Chinesisch",
     "SettingsResetBtn": "Einstellungen zurücksetzen",
     "SettingsResetConfirmTitle": "Einstellungen zurücksetzen?",
     "SettingsResetInfo": "Sind Sie sicher? Dies setzt Design, Schriftgröße und Sprache auf die Werkseinstellungen zurück.",
