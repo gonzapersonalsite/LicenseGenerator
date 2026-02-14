@@ -1,6 +1,6 @@
-[🇪🇸 Español](../es/OPERATIONS.md) | [🇺🇸 English](../../OPERATIONS.md) | [🇩🇪 Deutsch](../de/OPERATIONS.md) | [🇧🇷 Português](../pt/OPERATIONS.md) | 🇨🇳 **中文**
-
 # 📔 LicenseGenerator 操作与集成指南
+
+[🇪🇸 Español](../es/OPERATIONS.md) | [🇺🇸 English](../../OPERATIONS.md) | [🇩🇪 Deutsch](../de/OPERATIONS.md) | [🇧🇷 Português](../pt/OPERATIONS.md) | 🇨🇳 **中文**
 
 本指南是操作生成器，尤其是**将许可证系统集成到您自己的应用程序中**的完整手册 —— 无论您使用何种编程语言。
 

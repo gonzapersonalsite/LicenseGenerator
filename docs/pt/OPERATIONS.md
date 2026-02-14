@@ -1,6 +1,6 @@
-[🇪🇸 Español](../es/OPERATIONS.md) | [🇺🇸 English](../../OPERATIONS.md) | [🇩🇪 Deutsch](../de/OPERATIONS.md) | 🇧🇷 **Português** | [🇨🇳 中文](../zh/README.md)
-
 # 📔 Guia de Operações e Integração do LicenseGenerator
+
+[🇪🇸 Español](../es/OPERATIONS.md) | [🇺🇸 English](../../OPERATIONS.md) | [🇩🇪 Deutsch](../de/OPERATIONS.md) | 🇧🇷 **Português** | [🇨🇳 中文](../zh/README.md)
 
 Este guia é o manual completo para operar o Gerador e, acima de tudo, para **integrar o sistema de licenças em seus próprios aplicativos** de forma profissional — sem importar a linguagem de programação que você usa.
 
