@@ -21,6 +21,7 @@
     <Copyright>© 2026 Gonzalo Martínez García. All rights reserved.</Copyright>
     <Product>License Generator</Product>
     <Description>License Generator - Secure Licensing System for Gonzalo's Personal Projects.</Description>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

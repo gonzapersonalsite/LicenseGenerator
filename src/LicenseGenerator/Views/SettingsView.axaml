@@ -225,7 +225,7 @@
 
         <!-- Legal & Version Info -->
         <StackPanel Grid.Row="2" Spacing="5" HorizontalAlignment="Center" Margin="0,20,0,0">
-            <TextBlock Text="License Generator v1.0.0" 
+            <TextBlock Text="License Generator v1.0.1" 
                        HorizontalAlignment="Center"
                        FontSize="{DynamicResource FontSizeSmall}" 
                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
