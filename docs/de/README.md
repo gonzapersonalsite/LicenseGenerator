@@ -1,4 +1,4 @@
-[🇪🇸 Español](../es/README.md) | [🇺🇸 English](../../README.md) | 🇩🇪 **Deutsch** | [🇧🇷 Português](../pt/README.md) | [🇨🇳 中文](../zh/README.md)
+
 
 # 🗝️ License Generator
 
@@ -6,6 +6,8 @@
 [![Avalonia UI](https://img.shields.io/badge/Avalonia-11.2-ff69b4?logo=avaloniaui)](https://avaloniaui.net/)
 [![License](https://img.shields.io/badge/License-Custom%20EULA-blue)](../../LICENSE)
 [![Docs](https://img.shields.io/badge/Docs-OPERATIONS.md-success)](OPERATIONS.md)
+
+[🇪🇸 Español](../es/README.md) | [🇺🇸 English](../../README.md) | 🇩🇪 **Deutsch** | [🇧🇷 Português](../pt/README.md) | [🇨🇳 中文](../zh/README.md)
 
 **License Generator** ist ein leistungsstarkes Desktop-Tool, mit dem unabhängige Entwickler den gesamten Lebenszyklus ihrer Softwarelizenzen autonom, sicher und offline verwalten können.
 

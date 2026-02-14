@@ -1,6 +1,6 @@
-[🇪🇸 Español](../es/ARCHITECTURE.md) | [🇺🇸 English](../../ARCHITECTURE.md) | [🇩🇪 Deutsch](../de/ARCHITECTURE.md) | [🇧🇷 Português](../pt/ARCHITECTURE.md) | 🇨🇳 **中文**
-
 # 🏗️ 系统架构：许可证生态系统
+
+[🇪🇸 Español](../es/ARCHITECTURE.md) | [🇺🇸 English](../../ARCHITECTURE.md) | [🇩🇪 Deutsch](../de/ARCHITECTURE.md) | [🇧🇷 Português](../pt/ARCHITECTURE.md) | 🇨🇳 **中文**
 
 本文档详细介绍了支撑 License Generator 的技术设计和安全原则。
 

@@ -1,6 +1,6 @@
-🇪🇸 **Español** | [🇺🇸 English](../../ARCHITECTURE.md) | [🇩🇪 Deutsch](../de/ARCHITECTURE.md) | [🇧🇷 Português](../pt/ARCHITECTURE.md) | [🇨🇳 中文](../zh/README.md)
-
 # 🏗️ Arquitectura del Sistema: Ecosistema de Licencias
+
+🇪🇸 **Español** | [🇺🇸 English](../../ARCHITECTURE.md) | [🇩🇪 Deutsch](../de/ARCHITECTURE.md) | [🇧🇷 Português](../pt/ARCHITECTURE.md) | [🇨🇳 中文](../zh/README.md)
 
 Este documento detalla el diseño técnico y los principios de seguridad que sustentan el License Generator.
 
