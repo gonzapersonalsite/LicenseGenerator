@@ -68,3 +68,6 @@
 ---
 
 *用 ❤️ 开发，为软件创作者赋能。*
+
+**由 Gonzalo Martínez García 开发**  
+*Full Stack Developer | Software Engineering & Innovation*
