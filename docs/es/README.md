@@ -68,3 +68,6 @@ Este software se distribuye bajo un contrato de licencia de usuario final (**EUL
 ---
 
 *Desarrollado con ❤️ para empoderar a los creadores de software.*
+
+**Desarrollado por Gonzalo Martínez García**  
+*Full Stack Developer | Software Engineering & Innovation*

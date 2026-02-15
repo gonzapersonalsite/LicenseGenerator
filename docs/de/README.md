@@ -68,3 +68,6 @@ Diese Software wird unter einer benutzerdefinierten Endbenutzer-Lizenzvereinbaru
 ---
 
 *Entwickelt mit ❤️, um Software-Ersteller zu stärken.*
+
+**Entwickelt von Gonzalo Martínez García**  
+*Full Stack Developer | Software Engineering & Innovation*

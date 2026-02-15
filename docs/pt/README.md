@@ -68,3 +68,6 @@ Este software é distribuído sob um contrato de licença de usuário final (**E
 ---
 
 *Desenvolvido com ❤️ para empoderar criadores de software.*
+
+**Desenvolvido por Gonzalo Martínez García**  
+*Full Stack Developer | Software Engineering & Innovation*

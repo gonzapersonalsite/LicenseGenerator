@@ -68,3 +68,6 @@ This software is distributed under a custom End User License Agreement (**EULA**
 ---
 
 *Developed with ❤️ to empower software creators.*
+
+**Developed by Gonzalo Martínez García**  
+*Full Stack Developer | Software Engineering & Innovation*
