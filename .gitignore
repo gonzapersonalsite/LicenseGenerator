@@ -241,4 +241,12 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-.trae/rules/project.md
+
+# Exclude dist folder and everything inside
+dist/
+
+# Project-specific rules
+.trae/
+
+# Log files
+*.log
