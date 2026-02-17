@@ -9,8 +9,8 @@
     <!-- Build Optimizations for Release -->
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishTrimmed>false</PublishTrimmed>
+    <PublishReadyToRun>false</PublishReadyToRun>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
@@ -25,7 +25,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Obfuscar" Version="2.2.39" GeneratePathProperty="true">
+    <PackageReference Include="Obfuscar" Version="2.2.50" GeneratePathProperty="true">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -46,8 +46,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
   </ItemGroup>
 
-  <Target Name="Obfuscate" AfterTargets="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="Obfuscate" BeforeTargets="PrepareForPublish" Condition="'$(Configuration)' == 'Release'">
     <Exec Command="$(PkgObfuscar)\tools\Obfuscar.Console.exe $(ProjectDir)obfuscar.xml" WorkingDirectory="$(TargetDir)" />
-    <Copy SourceFiles="$(TargetDir)Obfuscated\LicenseGenerator.dll" DestinationFolder="$(TargetDir)" OverwriteReadOnlyFiles="true" />
+    <Copy SourceFiles="$(TargetDir)Obfuscated\LicenseGenerator.dll" DestinationFiles="$(TargetDir)LicenseGenerator.dll" OverwriteReadOnlyFiles="true" />
+    <Copy SourceFiles="$(TargetDir)Obfuscated\LicenseGenerator.dll" DestinationFiles="$(IntermediateOutputPath)LicenseGenerator.dll" OverwriteReadOnlyFiles="true" />
   </Target>
 </Project>

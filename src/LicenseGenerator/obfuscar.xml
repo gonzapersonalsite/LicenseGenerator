@@ -8,10 +8,19 @@
   <Var name="RenameEvents" value="true" />
   <Var name="RenameFields" value="true" />
   <Var name="UseUnicodeNames" value="true" />
-  <Var name="HideStrings" value="true" />
+  <Var name="HideStrings" value="false" />
   <Var name="OptimizeMethods" value="true" />
   <Var name="SuppressIldasm" value="true" />
+  <Var name="RenameNamespaces" value="false" />
   
-  <!-- Incluir el ensamblado principal del proyecto -->
-  <Module file="$(InPath)\LicenseGenerator.dll" />
+  <Module file="$(InPath)\LicenseGenerator.dll">
+    <SkipType name="LicenseGenerator.App" />
+    <SkipType name="LicenseGenerator.Program">
+      <SkipMethod name="Main" />
+    </SkipType>
+    <SkipNamespace name="LicenseGenerator.Models" />
+    <SkipNamespace name="LicenseGenerator.Views" />
+    <SkipNamespace name="LicenseGenerator.ViewModels" />
+    <SkipNamespace name="LicenseGenerator.Converters" />
+  </Module>
 </Obfuscator>

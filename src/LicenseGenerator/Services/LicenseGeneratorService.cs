@@ -102,7 +102,12 @@ public class LicenseGeneratorService : ILicenseGeneratorService
 
         license.Signature = Convert.ToBase64String(signature);
 
-        string json = JsonSerializer.Serialize(license, new JsonSerializerOptions { WriteIndented = true });
+        var jsonOptions = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            PropertyNamingPolicy = null
+        };
+        string json = JsonSerializer.Serialize(license, jsonOptions);
         
         // Save to history
         string historyFileName = $"{DateTime.Now:yyyyMMdd_HHmmss}_{appId}.json";
@@ -121,8 +126,11 @@ public class LicenseGeneratorService : ILicenseGeneratorService
             try
             {
                 var json = File.ReadAllText(file);
-                var license = JsonSerializer.Deserialize<LicenseData>(json);
-                if (license != null)
+                var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = false };
+                var license = JsonSerializer.Deserialize<LicenseData>(json, jsonOptions);
+                if (license != null && 
+                    !string.IsNullOrWhiteSpace(license.AppId) && 
+                    !string.IsNullOrWhiteSpace(license.Signature))
                 {
                     license.FileName = Path.GetFileName(file);
                     history.Add(license);
