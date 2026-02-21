@@ -17,11 +17,15 @@
     
     <!-- Professional & Legal Metadata -->
     <Authors>Gonzalo Martínez García</Authors>
-    <Company>Gonzalo Martínez García</Company>
+    <Company>gonzalo.dev</Company>
     <Copyright>© 2026 Gonzalo Martínez García. All rights reserved.</Copyright>
     <Product>License Generator</Product>
-    <Description>License Generator - Secure Licensing System for Gonzalo's Personal Projects.</Description>
+    <Description>A secure, internal licensing system for managing and generating software licenses for Gonzalo's personal projects. Built with Avalonia UI for cross-platform desktop support.</Description>
     <Version>1.0.1</Version>
+    <AssemblyTitle>LicenseGenerator</AssemblyTitle>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageProjectUrl>https://github.com/gonzapersonalsite/LicenseGenerator</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
