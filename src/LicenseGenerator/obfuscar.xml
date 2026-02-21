@@ -8,7 +8,7 @@
   <Var name="RenameEvents" value="true" />
   <Var name="RenameFields" value="true" />
   <Var name="UseUnicodeNames" value="true" />
-  <Var name="HideStrings" value="false" />
+  <Var name="HideStrings" value="true" />
   <Var name="OptimizeMethods" value="true" />
   <Var name="SuppressIldasm" value="true" />
   <Var name="RenameNamespaces" value="false" />
