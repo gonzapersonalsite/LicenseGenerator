@@ -73,6 +73,8 @@
     "AppsSearchPlaceholder": "Search applications by name...",
     "AppsIdHeader": "Application (No. Licenses)",
     "AppsActionHeader": "Actions",
+    "AppsOpenKeys": "Keys",
+    "AppsOpenKeysTooltip": "Open keys folder in file explorer",
     "AppsDeleteConfirmTitle": "Confirm deletion?",
     "AppsDeleteConfirmMsg": "Are you sure you want to delete the application",
     "ManageAppsPlaceholder": "Ex: NutriManager-PRO",
@@ -121,5 +123,6 @@
     "Support.Button": "Support on Buy Me a Coffee",
     "Support.OpenError": "Error opening support link.",
     "Docs.RepositoryButton": "View documentation and integration examples on GitHub",
-    "Repository.OpenError": "Error opening GitHub documentation."
+    "Repository.OpenError": "Error opening GitHub documentation.",
+    "Notification.OpenFolderError": "Error opening the keys folder."
 }

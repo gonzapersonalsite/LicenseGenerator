@@ -3,7 +3,10 @@ using CommunityToolkit.Mvvm.Input;
 using LicenseGenerator.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace LicenseGenerator.ViewModels;
@@ -133,5 +136,36 @@ public partial class AppsViewModel : PaginatedViewModelBase
     {
         IsConfirmDeleteOpen = false;
         AppToDelete = null;
+    }
+
+    [RelayCommand]
+    private void OpenKeyFolder(string appId)
+    {
+        try
+        {
+            string keysDir = _licenseService.GetAppKeysDirectory(appId);
+            if (!Directory.Exists(keysDir))
+            {
+                _notificationService.ShowError(_languageService["CommonError"], _languageService["Notification.OpenFolderError"]);
+                return;
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Process.Start(new ProcessStartInfo("explorer.exe", keysDir) { UseShellExecute = true });
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Process.Start(new ProcessStartInfo("xdg-open", keysDir) { UseShellExecute = true });
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Process.Start(new ProcessStartInfo("open", keysDir) { UseShellExecute = true });
+            }
+        }
+        catch
+        {
+            _notificationService.ShowError(_languageService["CommonError"], _languageService["Notification.OpenFolderError"]);
+        }
     }
 }

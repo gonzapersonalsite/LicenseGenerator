@@ -2,11 +2,13 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using LicenseGenerator.ViewModels;
 using LicenseGenerator.Views;
 using LicenseGenerator.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 
 namespace LicenseGenerator;
 
@@ -21,24 +23,48 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        var serviceCollection = new ServiceCollection();
-        ConfigureServices(serviceCollection);
-        Services = serviceCollection.BuildServiceProvider();
-
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
+            // Show splash screen immediately (no DI needed)
+            var splash = new SplashWindow();
+            desktop.MainWindow = splash;
+            splash.Show();
+
+            // Initialize everything asynchronously, then switch to main window
+            Dispatcher.UIThread.InvokeAsync(async () =>
             {
-                DataContext = Services.GetRequiredService<MainWindowViewModel>()
-            };
-            
-            
-            var settings = Services.GetRequiredService<ISettingsService>();
-            var language = Services.GetRequiredService<ILanguageService>();
-            
-            language.SetLanguage(settings.CurrentLanguage);
-            ApplyInitialTheme();
-            ApplyFontSize(settings.FontSizeScaling);
+                // Start minimum splash timer (runs in parallel with init)
+                var minimumSplashTime = Task.Delay(2000);
+
+                // DI & services setup
+                var serviceCollection = new ServiceCollection();
+                ConfigureServices(serviceCollection);
+                Services = serviceCollection.BuildServiceProvider();
+
+                var settings = Services.GetRequiredService<ISettingsService>();
+                var language = Services.GetRequiredService<ILanguageService>();
+
+                language.SetLanguage(settings.CurrentLanguage);
+                ApplyInitialTheme();
+                ApplyFontSize(settings.FontSizeScaling);
+
+                // Create main window (not shown yet)
+                var mainWindow = new MainWindow
+                {
+                    DataContext = Services.GetRequiredService<MainWindowViewModel>()
+                };
+
+                // Wait for minimum splash time to complete
+                await minimumSplashTime;
+
+                // Smooth fade-out transition on splash
+                await splash.FadeOutAsync();
+
+                // Show main window, close splash
+                desktop.MainWindow = mainWindow;
+                mainWindow.Show();
+                splash.Close();
+            });
         }
 
         base.OnFrameworkInitializationCompleted();

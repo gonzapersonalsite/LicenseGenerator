@@ -73,6 +73,8 @@
     "AppsSearchPlaceholder": "Buscar aplicativos por nome...",
     "AppsIdHeader": "Aplicativo (Nº Licenças)",
     "AppsActionHeader": "Ações",
+    "AppsOpenKeys": "Chaves",
+    "AppsOpenKeysTooltip": "Abrir pasta de chaves no gerenciador de arquivos",
     "AppsDeleteConfirmTitle": "Confirmar exclusão?",
     "AppsDeleteConfirmMsg": "Tem certeza de que deseja excluir o aplicativo",
     "ManageAppsPlaceholder": "Ex: NutriManager-PRO",
@@ -121,5 +123,6 @@
     "Support.Button": "Apoiar no Buy Me a Coffee",
     "Support.OpenError": "Erro ao abrir o link de apoio.",
     "Docs.RepositoryButton": "Ver documentação e exemplos de integração no GitHub",
-    "Repository.OpenError": "Erro ao abrir a documentação no GitHub."
+    "Repository.OpenError": "Erro ao abrir a documentação no GitHub.",
+    "Notification.OpenFolderError": "Erro ao abrir a pasta de chaves."
 }

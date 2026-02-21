@@ -168,6 +168,11 @@ public class LicenseGeneratorService : ILicenseGeneratorService
         return Directory.GetFiles(_licensesDirectory, searchPattern).Length;
     }
 
+    public string GetAppKeysDirectory(string appId)
+    {
+        return Path.Combine(_keysDirectory, appId);
+    }
+
     public (int AppsCount, int LicensesCount) GetStats()
     {
         int apps = GetAvailableApps().Count();

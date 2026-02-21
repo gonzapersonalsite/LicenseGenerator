@@ -1,0 +1,52 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="LicenseGenerator.Views.SplashWindow"
+        Title="License Generator"
+        Icon="/Assets/app.ico"
+        Width="420" Height="320"
+        CanResize="False"
+        SystemDecorations="None"
+        WindowStartupLocation="CenterScreen"
+        Background="#1a1a2e"
+        TransparencyLevelHint="None">
+
+    <Window.Styles>
+        <!-- Fade-in animation on the content -->
+        <Style Selector="Grid.splash-content">
+            <Style.Animations>
+                <Animation Duration="0:0:0.6" FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </Window.Styles>
+
+    <Grid Classes="splash-content" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <StackPanel Spacing="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <!-- App Logo -->
+            <Image Source="/Assets/app.png"
+                   Width="140" Height="140"
+                   HorizontalAlignment="Center"/>
+
+            <!-- App Name -->
+            <TextBlock Text="License Generator"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="#e0e0e0"
+                       HorizontalAlignment="Center"/>
+
+            <!-- Loading indicator -->
+            <ProgressBar IsIndeterminate="True"
+                         Width="200"
+                         Height="3"
+                         Foreground="#4a9eff"
+                         Background="#2a2a4a"
+                         HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</Window>

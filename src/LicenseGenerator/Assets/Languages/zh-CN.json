@@ -73,6 +73,8 @@
     "AppsSearchPlaceholder": "按名称搜索应用...",
     "AppsIdHeader": "应用 (许可证数)",
     "AppsActionHeader": "操作",
+    "AppsOpenKeys": "密钥",
+    "AppsOpenKeysTooltip": "在文件管理器中打开密钥文件夹",
     "AppsDeleteConfirmTitle": "确认删除？",
     "AppsDeleteConfirmMsg": "您确定要删除应用吗",
     "ManageAppsPlaceholder": "例如：NutriManager-PRO",
@@ -121,5 +123,6 @@
     "Support.Button": "在 Buy Me a Coffee 上支持",
     "Support.OpenError": "打开支持链接时出错。",
     "Docs.RepositoryButton": "在 GitHub 上查看文档和集成示例",
-    "Repository.OpenError": "打开 GitHub 文档时出错。"
+    "Repository.OpenError": "打开 GitHub 文档时出错。",
+    "Notification.OpenFolderError": "打开密钥文件夹时出错。"
 }

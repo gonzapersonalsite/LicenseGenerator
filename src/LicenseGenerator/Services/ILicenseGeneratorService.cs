@@ -13,5 +13,6 @@ public interface ILicenseGeneratorService
     IEnumerable<LicenseData> GetLicenseHistory();
     bool DeleteLicense(string fileName);
     int GetLicenseCountForApp(string appId);
+    string GetAppKeysDirectory(string appId);
     (int AppsCount, int LicensesCount) GetStats();
 }

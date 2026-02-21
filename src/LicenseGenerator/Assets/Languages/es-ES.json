@@ -73,6 +73,8 @@
     "AppsSearchPlaceholder": "Buscar aplicaciones por nombre...",
     "AppsIdHeader": "Aplicación (Nº Licencias)",
     "AppsActionHeader": "Acciones",
+    "AppsOpenKeys": "Claves",
+    "AppsOpenKeysTooltip": "Abrir carpeta de claves en el explorador de archivos",
     "AppsDeleteConfirmTitle": "¿Confirmar eliminación?",
     "AppsDeleteConfirmMsg": "¿Estás seguro de que deseas eliminar la aplicación",
     "ManageAppsPlaceholder": "Ej: NutriManager-PRO",
@@ -121,5 +123,6 @@
     "Support.Button": "Apoyar en Buy Me a Coffee",
     "Support.OpenError": "Error al abrir el enlace de apoyo.",
     "Docs.RepositoryButton": "Ver documentación y ejemplos de integración en GitHub",
-    "Repository.OpenError": "Error al abrir la documentación en GitHub."
+    "Repository.OpenError": "Error al abrir la documentación en GitHub.",
+    "Notification.OpenFolderError": "Error al abrir la carpeta de claves."
 }
