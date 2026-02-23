@@ -253,3 +253,5 @@ dist/
 
 # Certificates
 certificates/
+
+scripts/create-msix-manual.bat
