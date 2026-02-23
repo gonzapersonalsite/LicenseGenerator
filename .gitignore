@@ -255,3 +255,4 @@ dist/
 certificates/
 
 scripts/create-msix-manual.bat
+scripts/generate_manifest.ps1
