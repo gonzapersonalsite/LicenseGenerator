@@ -250,3 +250,6 @@ dist/
 
 # Log files
 *.log
+
+# Certificates
+certificates/
