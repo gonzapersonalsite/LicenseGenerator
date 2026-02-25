@@ -133,6 +133,8 @@ class LicenseData {
 
 > [!IMPORTANT]
 > **黄金法则**: `GetDataToSign()` 必须生成 **完全精确** 的字符串 `AppId|Name|HWID|yyyy-MM-dd` (或 `NEVER`)。哪怕一个字符的差异（空格、大写、日期格式），都会导致签名无效。分隔符永远是 `|`。
+> 
+> **文化不变性 (Culture Invariance)**: 在 C# 等语言中，请确保使用 `CultureInfo.InvariantCulture` 或硬编码格式字符串 (如 `ToString("yyyy-MM-dd")`)。这可以避免系统根据计算机的区域设置 (例如中文 vs 英文) 使用不同的日期分隔符 (如 `-` 与 `/`)。
 
 ---
 

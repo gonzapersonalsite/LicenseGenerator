@@ -133,6 +133,8 @@ class LicenseData {
 
 > [!IMPORTANT]
 > **Die Goldene Regel**: `GetDataToSign()` muss **exakt** die Zeichenkette `AppId|Name|HWID|yyyy-MM-dd` (oder `NEVER`) erzeugen. Ein einziges abweichendes Zeichen (ein Leerzeichen, ein Großbuchstabe, ein anderes Datumsformat) macht die Signatur ungültig. Das Trennzeichen ist immer `|`.
+> 
+> **Kulturinvarianz**: Stellen Sie in Sprachen wie C# sicher, dass Sie `CultureInfo.InvariantCulture` oder einen fest codierten Format-String wie `ToString("yyyy-MM-dd")` verwenden. Dies vermeidet Probleme, bei denen das System je nach regionalen Einstellungen des Computers (z. B. Deutsch vs. Englisch) unterschiedliche Trennzeichen (z. B. `-` vs. `/`) verwenden könnte.
 
 ---
 

@@ -133,6 +133,8 @@ class LicenseData {
 
 > [!IMPORTANT]
 > **The Golden Rule**: `GetDataToSign()` must produce **exactly** the string `AppId|Name|HWID|yyyy-MM-dd` (or `NEVER`). A single character difference (a space, a capital letter, a different date format) will make the signature invalid. The separator is always `|`.
+> 
+> **Culture Invariance**: In languages like C#, ensure you use `CultureInfo.InvariantCulture` or a hardcoded format string like `ToString("yyyy-MM-dd")`. This avoids issues where the system might use different separators (e.g., `-` vs `/`) depending on the computer's regional settings (English vs Spanish).
 
 ---
 
