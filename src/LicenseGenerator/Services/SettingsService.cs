@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text.Json;
+using LicenseGenerator.Models;
 
 namespace LicenseGenerator.Services;
 
@@ -58,9 +59,15 @@ public class SettingsService : ISettingsService
         try
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
-            var json = JsonSerializer.Serialize(new { AppTheme, FontSizeScaling, CurrentLanguage }, options);
+            var data = new SettingsData
+            {
+                AppTheme = AppTheme,
+                FontSizeScaling = FontSizeScaling,
+                CurrentLanguage = CurrentLanguage
+            };
+            var json = JsonSerializer.Serialize(data, options);
             File.WriteAllText(_settingsFilePath, json);
-            _loggingService.LogDebug($"Settings saved: {json}");
+            _loggingService.LogInfo($"Settings saved to {_settingsFilePath}");
         }
         catch (Exception ex)
         {
@@ -76,18 +83,14 @@ public class SettingsService : ISettingsService
             {
                 var json = File.ReadAllText(_settingsFilePath);
                 _loggingService.LogDebug($"Loading settings: {json}");
-                var data = JsonSerializer.Deserialize<JsonElement>(json);
-                if (data.TryGetProperty("AppTheme", out var themeProperty))
+                
+                var data = JsonSerializer.Deserialize<SettingsData>(json);
+                if (data != null)
                 {
-                    _appTheme = themeProperty.GetString() ?? "Dark";
-                }
-                if (data.TryGetProperty("FontSizeScaling", out var fontProperty))
-                {
-                    _fontSizeScaling = fontProperty.GetDouble();
-                }
-                if (data.TryGetProperty("CurrentLanguage", out var langProperty))
-                {
-                    _currentLanguage = langProperty.GetString() ?? string.Empty;
+                    _appTheme = data.AppTheme ?? "Dark";
+                    _fontSizeScaling = data.FontSizeScaling;
+                    _currentLanguage = data.CurrentLanguage ?? string.Empty;
+                    _loggingService.LogInfo($"Settings loaded from {_settingsFilePath}. Language: '{_currentLanguage}'");
                 }
             }
             else

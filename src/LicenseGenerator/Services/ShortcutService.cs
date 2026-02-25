@@ -63,6 +63,10 @@ public class ShortcutService : IShortcutService
             link.SetPath(targetPath);
             link.SetDescription(description ?? "");
             link.SetWorkingDirectory(Path.GetDirectoryName(targetPath) ?? "");
+            
+            // Set the icon to the executable itself (index 0)
+            // This is more robust for MSIX/WindowsStore apps as the icon is embedded
+            link.SetIconLocation(targetPath, 0);
 
             var persistFile = (IPersistFile)link;
             persistFile.Save(shortcutPath, true);

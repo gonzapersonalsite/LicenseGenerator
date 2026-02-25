@@ -14,6 +14,7 @@ public class LanguageService : ILanguageService, INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
     private readonly ISettingsService _settingsService;
+    private readonly ILoggingService _loggingService;
     private Dictionary<string, string> _translations = new();
     private string _currentLanguage = "en-US";
     private readonly List<string> _availableLanguages = new();
@@ -26,9 +27,10 @@ public class LanguageService : ILanguageService, INotifyPropertyChanged
 
     public IEnumerable<string> AvailableLanguages => _availableLanguages;
 
-    public LanguageService(ISettingsService settingsService)
+    public LanguageService(ISettingsService settingsService, ILoggingService loggingService)
     {
         _settingsService = settingsService;
+        _loggingService = loggingService;
         
         DiscoverAvailableLanguages();
         
@@ -38,12 +40,16 @@ public class LanguageService : ILanguageService, INotifyPropertyChanged
         // If no language is saved or it's not available, try system language
         if (string.IsNullOrEmpty(targetLanguage) || !_availableLanguages.Contains(targetLanguage))
         {
-            targetLanguage = DetectSystemLanguage();
+            string detected = DetectSystemLanguage();
+            _loggingService.LogInfo($"Target language '{targetLanguage}' not found or empty. Using detected: '{detected}'");
+            targetLanguage = detected;
+            
             // Persist the detected language so it doesn't "re-detect" (and potentially change) every time
             _settingsService.CurrentLanguage = targetLanguage;
         }
 
         _currentLanguage = targetLanguage;
+        _loggingService.LogInfo($"LanguageService initialized with language: '{_currentLanguage}'");
         LoadLanguage(_currentLanguage);
         UpdateResources();
     }
@@ -137,8 +143,9 @@ public class LanguageService : ILanguageService, INotifyPropertyChanged
             _translations = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? new();
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            _loggingService.LogError($"Error loading language {languageCode}", ex);
             return false;
         }
     }
