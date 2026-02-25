@@ -124,5 +124,12 @@
     "Support.OpenError": "打开支持链接时出错。",
     "Docs.RepositoryButton": "在 GitHub 上查看文档和集成示例",
     "Repository.OpenError": "打开 GitHub 文档时出错。",
-    "Notification.OpenFolderError": "打开密钥文件夹时出错。"
+    "Notification.OpenFolderError": "打开密钥文件夹时出错。",
+    "SettingsSystemIntegration": "系统集成",
+    "SettingsShortcutDescription": "在桌面上创建快捷方式以快速打开应用程序。",
+    "SettingsShortcutBtn": "创建桌面快捷方式",
+    "Notification.ShortcutCreated": "桌面快捷方式创建成功。",
+    "Notification.ShortcutError": "创建桌面快捷方式时出错。",
+    "SettingsOpenLogsBtn": "打开日志文件夹",
+    "SettingsOpenLogsTooltip": "打开存储技术日志的文件夹"
 }

@@ -124,5 +124,12 @@
     "Support.OpenError": "Error al abrir el enlace de apoyo.",
     "Docs.RepositoryButton": "Ver documentación y ejemplos de integración en GitHub",
     "Repository.OpenError": "Error al abrir la documentación en GitHub.",
-    "Notification.OpenFolderError": "Error al abrir la carpeta de claves."
+    "Notification.OpenFolderError": "Error al abrir la carpeta de claves.",
+    "SettingsSystemIntegration": "Integración con el Sistema",
+    "SettingsShortcutDescription": "Crea un acceso directo en tu escritorio para abrir la aplicación rápidamente.",
+    "SettingsShortcutBtn": "Crear Acceso Directo",
+    "Notification.ShortcutCreated": "Acceso directo creado en el escritorio.",
+    "Notification.ShortcutError": "Error al crear el acceso directo.",
+    "SettingsOpenLogsBtn": "Abrir Carpeta de Logs",
+    "SettingsOpenLogsTooltip": "Abrir la carpeta donde se guardan los registros técnicos"
 }

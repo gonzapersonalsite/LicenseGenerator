@@ -39,6 +39,8 @@ public class LanguageService : ILanguageService, INotifyPropertyChanged
         if (string.IsNullOrEmpty(targetLanguage) || !_availableLanguages.Contains(targetLanguage))
         {
             targetLanguage = DetectSystemLanguage();
+            // Persist the detected language so it doesn't "re-detect" (and potentially change) every time
+            _settingsService.CurrentLanguage = targetLanguage;
         }
 
         _currentLanguage = targetLanguage;

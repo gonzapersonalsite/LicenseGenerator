@@ -8,11 +8,14 @@ namespace LicenseGenerator.Services;
 public class DataService : IDataService
 {
     private readonly string _dataDirectory;
+    private readonly ILoggingService _loggingService;
 
-    public DataService()
+    public DataService(ILoggingService loggingService)
     {
+        _loggingService = loggingService;
         _dataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "LicenseGenerator");
         if (!Directory.Exists(_dataDirectory)) Directory.CreateDirectory(_dataDirectory);
+        _loggingService.LogInfo($"DataService initialized. Data dir: {_dataDirectory}");
     }
 
     public async Task ExportDataAsync(string destinationPath)
@@ -87,7 +90,15 @@ public class DataService : IDataService
                 if (hasSettings)
                 {
                     File.Copy(Path.Combine(tempPath, "settings.json"), Path.Combine(_dataDirectory, "settings.json"), true);
+                    _loggingService.LogInfo("Settings imported from backup.");
                 }
+
+                _loggingService.LogInfo("Data import completed successfully.");
+            }
+            catch (Exception ex)
+            {
+                _loggingService.LogError("Error during data import", ex);
+                throw;
             }
             finally
             {

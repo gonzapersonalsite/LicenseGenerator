@@ -124,5 +124,12 @@
     "Support.OpenError": "Fehler beim Öffnen des Support-Links.",
     "Docs.RepositoryButton": "Dokumentation und Integrationsbeispiele auf GitHub anzeigen",
     "Repository.OpenError": "Fehler beim Öffnen der GitHub-Dokumentation.",
-    "Notification.OpenFolderError": "Fehler beim Öffnen des Schlüsselordners."
+    "Notification.OpenFolderError": "Fehler beim Öffnen des Schlüsselordners.",
+    "SettingsSystemIntegration": "Systemintegration",
+    "SettingsShortcutDescription": "Erstellen Sie eine Verknüpfung auf Ihrem Desktop, um die Anwendung schnell zu öffnen.",
+    "SettingsShortcutBtn": "Desktop-Verknüpfung erstellen",
+    "Notification.ShortcutCreated": "Desktop-Verknüpfung erfolgreich erstellt.",
+    "Notification.ShortcutError": "Fehler beim Erstellen der Desktop-Verknüpfung.",
+    "SettingsOpenLogsBtn": "Protokollordner öffnen",
+    "SettingsOpenLogsTooltip": "Den Ordner öffnen, in dem die technischen Protokolle gespeichert sind"
 }

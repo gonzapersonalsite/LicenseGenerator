@@ -124,5 +124,12 @@
     "Support.OpenError": "Error opening support link.",
     "Docs.RepositoryButton": "View documentation and integration examples on GitHub",
     "Repository.OpenError": "Error opening GitHub documentation.",
-    "Notification.OpenFolderError": "Error opening the keys folder."
+    "Notification.OpenFolderError": "Error opening the keys folder.",
+    "SettingsSystemIntegration": "System Integration",
+    "SettingsShortcutDescription": "Create a shortcut on your desktop to open the application quickly.",
+    "SettingsShortcutBtn": "Create Desktop Shortcut",
+    "Notification.ShortcutCreated": "Desktop shortcut created successfully.",
+    "Notification.ShortcutError": "Error creating desktop shortcut.",
+    "SettingsOpenLogsBtn": "Open Logs Folder",
+    "SettingsOpenLogsTooltip": "Open the folder where technical logs are stored"
 }

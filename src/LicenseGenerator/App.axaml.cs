@@ -43,7 +43,22 @@ public partial class App : Application
 
                 var settings = Services.GetRequiredService<ISettingsService>();
                 var language = Services.GetRequiredService<ILanguageService>();
+                var logger = Services.GetRequiredService<ILoggingService>();
 
+                // Global exception handling
+                AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+                {
+                    logger.LogError("Unhandled AppDomain exception", e.ExceptionObject as Exception);
+                };
+
+                TaskScheduler.UnobservedTaskException += (s, e) =>
+                {
+                    logger.LogError("Unobserved task exception", e.Exception);
+                    e.SetObserved();
+                };
+
+                logger.CleanupOldLogs();
+                logger.LogInfo("Application started and services initialized.");
                 language.SetLanguage(settings.CurrentLanguage);
                 ApplyInitialTheme();
                 ApplyFontSize(settings.FontSizeScaling);
@@ -72,11 +87,12 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services)
     {
-        // Services
-        services.AddSingleton<ISettingsService, SettingsService>();
+        services.AddSingleton<ILoggingService, LoggingService>();
+        services.AddSingleton<IShortcutService, ShortcutService>();
+        services.AddSingleton<ISettingsService>(sp => new SettingsService(sp.GetRequiredService<ILoggingService>()));
         services.AddSingleton<ILanguageService, LanguageService>();
         services.AddSingleton<ILicenseGeneratorService, LicenseGeneratorService>();
-        services.AddSingleton<IDataService, DataService>();
+        services.AddSingleton<IDataService>(sp => new DataService(sp.GetRequiredService<ILoggingService>()));
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<INotificationService, NotificationService>();
 

@@ -101,6 +101,36 @@
                     </StackPanel>
                 </Border>
 
+                <!-- System Integration Section -->
+                <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" 
+                        BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}" 
+                        BorderThickness="1" 
+                        CornerRadius="8"
+                        Padding="20">
+                    <StackPanel Spacing="15">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <PathIcon Data="M21 16.5C21 16.88 20.79 17.21 20.47 17.38L12.57 21.82C12.41 21.94 12.21 22 12 22C11.79 22 11.59 21.94 11.43 21.82L3.53 17.38C3.21 17.21 3 16.88 3 16.5V7.5C3 7.12 3.21 6.79 3.53 6.62L11.43 2.18C11.59 2.06 11.79 2 12 2C12.21 2 12.41 2.06 12.57 2.18L20.47 6.62C20.79 6.79 21 7.12 21 7.5V16.5Z" 
+                                      Width="20" Height="20" Opacity="0.7"/>
+                            <TextBlock Text="{DynamicResource SettingsSystemIntegration}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        
+                        <TextBlock Text="{DynamicResource SettingsShortcutDescription}" 
+                                   Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                   FontSize="{DynamicResource FontSizeSmall}"/>
+
+                        <Separator Height="1" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" Margin="0,5"/>
+
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Text="{DynamicResource SettingsShortcutBtn}" VerticalAlignment="Center"/>
+                            <Button Grid.Column="1" 
+                                    Content="{DynamicResource SettingsShortcutBtn}" 
+                                    Command="{Binding CreateShortcutCommand}"
+                                    MinWidth="150"
+                                    HorizontalContentAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
                 <!-- Information Section -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" 
                         CornerRadius="8"
@@ -158,6 +188,15 @@
                             <Button Grid.Column="1" 
                                     Content="{DynamicResource CommonImport}" 
                                     Command="{Binding ShowImportConfirmCommand}"
+                                    MinWidth="150"
+                                    HorizontalContentAlignment="Center"/>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Text="{DynamicResource SettingsOpenLogsTooltip}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,10,0" Opacity="0.7" FontSize="{DynamicResource FontSizeSmall}"/>
+                            <Button Grid.Column="1" 
+                                    Content="{DynamicResource SettingsOpenLogsBtn}" 
+                                    Command="{Binding OpenLogsFolderCommand}"
                                     MinWidth="150"
                                     HorizontalContentAlignment="Center"/>
                         </Grid>
@@ -225,7 +264,7 @@
 
         <!-- Legal & Version Info -->
         <StackPanel Grid.Row="2" Spacing="5" HorizontalAlignment="Center" Margin="0,20,0,0">
-            <TextBlock Text="License Generator v1.0.2.0" 
+            <TextBlock Text="License Generator v1.0.3.0" 
                        HorizontalAlignment="Center"
                        FontSize="{DynamicResource FontSizeSmall}" 
                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>

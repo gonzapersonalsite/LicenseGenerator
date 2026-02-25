@@ -124,5 +124,12 @@
     "Support.OpenError": "Erro ao abrir o link de apoio.",
     "Docs.RepositoryButton": "Ver documentação e exemplos de integração no GitHub",
     "Repository.OpenError": "Erro ao abrir a documentação no GitHub.",
-    "Notification.OpenFolderError": "Erro ao abrir a pasta de chaves."
+    "Notification.OpenFolderError": "Erro ao abrir a pasta de chaves.",
+    "SettingsSystemIntegration": "Integração com o Sistema",
+    "SettingsShortcutDescription": "Crie um atalho na sua área de trabalho para abrir o aplicativo rapidamente.",
+    "SettingsShortcutBtn": "Criar Atalho na Área de Trabalho",
+    "Notification.ShortcutCreated": "Atalho na área de trabalho criado com sucesso.",
+    "Notification.ShortcutError": "Erro ao criar atalho na área de trabalho.",
+    "SettingsOpenLogsBtn": "Abrir Pasta de Logs",
+    "SettingsOpenLogsTooltip": "Abrir a pasta onde os registros técnicos são armazenados"
 }

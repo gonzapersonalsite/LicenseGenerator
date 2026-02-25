@@ -3,14 +3,16 @@ using CommunityToolkit.Mvvm.Input;
 using LicenseGenerator.Services;
 using Avalonia;
 using Avalonia.Styling;
-using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System;
-using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LicenseGenerator.ViewModels;
 
@@ -23,6 +25,8 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly IDataService _dataService;
     private readonly IDialogService _dialogService;
     private readonly INotificationService _notificationService;
+    private readonly ILoggingService _loggingService;
+    private readonly IShortcutService _shortcutService;
 
     public ILanguageService LanguageService => _languageService;
 
@@ -45,13 +49,22 @@ public partial class SettingsViewModel : ViewModelBase
     public ObservableCollection<SettingsOption<double>> FontSizes { get; } = new();
     public ObservableCollection<SettingsOption<string>> Languages { get; } = new();
 
-    public SettingsViewModel(ISettingsService settingsService, ILanguageService languageService, IDataService dataService, IDialogService dialogService, INotificationService notificationService)
+    public SettingsViewModel(
+        ISettingsService settingsService,
+        ILanguageService languageService,
+        IDataService dataService,
+        IDialogService dialogService,
+        INotificationService notificationService,
+        ILoggingService loggingService,
+        IShortcutService shortcutService)
     {
         _settingsService = settingsService;
         _languageService = languageService;
         _dataService = dataService;
         _dialogService = dialogService;
         _notificationService = notificationService;
+        _loggingService = loggingService;
+        _shortcutService = shortcutService;
 
         InitializeOptions();
         LoadCurrentSettings();
@@ -192,7 +205,7 @@ public partial class SettingsViewModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Export error: {ex}");
+                _loggingService.LogError("Export error", ex);
                 _notificationService.ShowError(_languageService["CommonError"], _languageService["Backup.ExportError"]);
             }
         }
@@ -227,15 +240,44 @@ public partial class SettingsViewModel : ViewModelBase
                 _notificationService.ShowSuccess(_languageService["CommonSuccess"], _languageService["Backup.ImportSuccess"]);
                 
                 // Restart app to apply changes safely
-                await Task.Delay(1000); // Wait a bit for notification visibility
+                await Task.Delay(4000); // Give enough time for the user to read the success message
                 System.Diagnostics.Process.Start(Environment.ProcessPath!);
                 Environment.Exit(0);
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Import error: {ex}");
+                _loggingService.LogError("Import error", ex);
                 _notificationService.ShowError(_languageService["CommonError"], _languageService["Backup.ImportError"]);
             }
+        }
+    }
+
+    [RelayCommand]
+    private void CreateShortcut()
+    {
+        try
+        {
+            var exePath = Environment.ProcessPath;
+            if (string.IsNullOrEmpty(exePath)) return;
+
+            var success = _shortcutService.CreateDesktopShortcut(
+                "License Generator", 
+                exePath, 
+                _languageService["SettingsShortcutDescription"]);
+
+            if (success)
+            {
+                _notificationService.ShowSuccess(_languageService["CommonSuccess"], _languageService["Notification.ShortcutCreated"]);
+            }
+            else
+            {
+                _notificationService.ShowError(_languageService["CommonError"], _languageService["Notification.ShortcutError"]);
+            }
+        }
+        catch (Exception ex)
+        {
+            _loggingService.LogError("Error in CreateShortcut command", ex);
+            _notificationService.ShowError(_languageService["CommonError"], _languageService["Notification.ShortcutError"]);
         }
     }
 
@@ -253,7 +295,7 @@ public partial class SettingsViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Error opening support link: {ex}");
+            _loggingService.LogError("Error opening support link", ex);
             _notificationService.ShowError(_languageService["CommonError"], _languageService["Support.OpenError"]);
         }
     }
@@ -272,8 +314,86 @@ public partial class SettingsViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Error opening repository link: {ex}");
+            _loggingService.LogError("Error opening repository link", ex);
             _notificationService.ShowError(_languageService["CommonError"], _languageService["Repository.OpenError"]);
         }
+    }
+
+    [RelayCommand]
+    private void OpenLogsFolder()
+    {
+        try
+        {
+            var logDir = _loggingService.LogDirectory;
+            if (!Directory.Exists(logDir))
+            {
+                Directory.CreateDirectory(logDir);
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                string resolvedPath = ResolveActualPath(logDir);
+                _loggingService.LogDebug($"Opening logs resolved path: {resolvedPath}");
+                Process.Start(new ProcessStartInfo { FileName = resolvedPath, UseShellExecute = true, Verb = "open" });
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Process.Start(new ProcessStartInfo("xdg-open", logDir) { UseShellExecute = true });
+            }
+        }
+        catch (Exception ex)
+        {
+            _loggingService.LogError("Error opening logs folder", ex);
+            _notificationService.ShowError(_languageService["CommonError"], _languageService["Notification.OpenFolderError"]);
+        }
+    }
+
+    private string ResolveActualPath(string path)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            try
+            {
+                string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                if (path.StartsWith(localAppData, StringComparison.OrdinalIgnoreCase))
+                {
+                    var parts = path.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                    var licenseGenIndex = -1;
+                    for (int i = 0; i < parts.Length; i++)
+                    {
+                        if (parts[i].Equals("LicenseGenerator", StringComparison.OrdinalIgnoreCase))
+                        {
+                            licenseGenIndex = i;
+                            break;
+                        }
+                    }
+
+                    if (licenseGenIndex != -1)
+                    {
+                        if (path.Contains("Packages", StringComparison.OrdinalIgnoreCase) && path.Contains("LocalCache", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return path;
+                        }
+
+                        string packagesPath = Path.Combine(localAppData, "Packages");
+                        if (Directory.Exists(packagesPath))
+                        {
+                            var dirs = Directory.GetDirectories(packagesPath, "*LicenseGenerator*");
+                            if (dirs.Length > 0)
+                            {
+                                string subPath = string.Join(Path.DirectorySeparatorChar.ToString(), parts.Skip(licenseGenIndex + 1));
+                                string actualPath = Path.Combine(dirs[0], "LocalCache", "Local", "LicenseGenerator", subPath);
+                                if (Directory.Exists(actualPath) || File.Exists(actualPath))
+                                {
+                                    return actualPath;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch { /* Fallback */ }
+        }
+        return path;
     }
 }
