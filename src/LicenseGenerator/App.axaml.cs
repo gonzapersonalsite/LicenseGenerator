@@ -63,6 +63,10 @@ public partial class App : Application
                 ApplyInitialTheme();
                 ApplyFontSize(settings.FontSizeScaling);
 
+                // Show smart greeting (safe, catch-all inside service)
+                var greetingService = Services.GetRequiredService<IGreetingService>();
+                greetingService.ShowSmartGreeting();
+
                 // Create main window (not shown yet)
                 var mainWindow = new MainWindow
                 {
@@ -95,6 +99,7 @@ public partial class App : Application
         services.AddSingleton<IDataService>(sp => new DataService(sp.GetRequiredService<ILoggingService>()));
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<INotificationService, NotificationService>();
+        services.AddSingleton<IGreetingService, GreetingService>();
 
         // ViewModels
         services.AddSingleton<MainWindowViewModel>();

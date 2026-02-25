@@ -98,6 +98,13 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </Grid>
+
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Text="{DynamicResource SettingsShowGreeting}" VerticalAlignment="Center"/>
+                            <ToggleSwitch Grid.Column="1" 
+                                          IsChecked="{Binding IsGreetingEnabled}"
+                                          OnContent="" OffContent=""/>
+                        </Grid>
                     </StackPanel>
                 </Border>
 
@@ -183,11 +190,9 @@
                             <TextBlock Text="{DynamicResource Backup.Export}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,10,0"/>
                             <Button Grid.Column="1" 
                                     Command="{Binding ExportDataCommand}"
-                                    Classes="Primary"
-                                    MinWidth="150"
-                                    HorizontalContentAlignment="Center">
+                                    Classes="Primary">
                                 <StackPanel Orientation="Horizontal" Spacing="6">
-                                    <PathIcon Data="{StaticResource ExportRegular}" Width="14" Height="14"/>
+                                    <PathIcon Data="{StaticResource ExportRegular}"/>
                                     <TextBlock Text="{DynamicResource CommonExport}" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
@@ -197,11 +202,9 @@
                             <TextBlock Text="{DynamicResource Backup.Import}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,10,0"/>
                             <Button Grid.Column="1" 
                                     Command="{Binding ShowImportConfirmCommand}"
-                                    Classes="Danger"
-                                    MinWidth="150"
-                                    HorizontalContentAlignment="Center">
+                                    Classes="Danger">
                                 <StackPanel Orientation="Horizontal" Spacing="6">
-                                    <PathIcon Data="{StaticResource ImportRegular}" Width="14" Height="14"/>
+                                    <PathIcon Data="{StaticResource ImportRegular}"/>
                                     <TextBlock Text="{DynamicResource CommonImport}" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
@@ -211,11 +214,9 @@
                             <TextBlock Text="{DynamicResource SettingsOpenLogsTooltip}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,10,0" Opacity="0.7" FontSize="{DynamicResource FontSizeSmall}"/>
                             <Button Grid.Column="1" 
                                     Command="{Binding OpenLogsFolderCommand}"
-                                    Classes="Primary"
-                                    MinWidth="150"
-                                    HorizontalContentAlignment="Center">
+                                    Classes="Primary">
                                 <StackPanel Orientation="Horizontal" Spacing="6">
-                                    <PathIcon Data="{StaticResource FolderRegular}" Width="14" Height="14"/>
+                                    <PathIcon Data="{StaticResource FolderRegular}"/>
                                     <TextBlock Text="{DynamicResource SettingsOpenLogsBtn}" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
@@ -275,9 +276,11 @@
                         </StackPanel>
                         <Button Grid.Column="1" 
                                 Command="{Binding ShowResetConfirmCommand}"
-                                ToolTip.Tip="{DynamicResource SettingsResetBtn}"
-                                Classes="Danger IconOnly">
-                            <PathIcon Data="{StaticResource DeleteRegular}"/>
+                                Classes="Danger">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <PathIcon Data="{StaticResource DeleteRegular}" Width="14" Height="14"/>
+                                <TextBlock Text="{DynamicResource SettingsResetBtn}" VerticalAlignment="Center"/>
+                            </StackPanel>
                         </Button>
                     </Grid>
                 </Border>

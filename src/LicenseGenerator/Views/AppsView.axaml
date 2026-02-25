@@ -61,11 +61,11 @@
                                                 <TextBlock Text="{Binding DisplayText}" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="{DynamicResource FontSizeNormal}"/>
                                             </StackPanel>
                                             
-                                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="5">
+                                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center" Margin="5,0,15,0">
                                                 <Button Command="{Binding $parent[UserControl].((vm:AppsViewModel)DataContext).CopyPublicKeyCommand}"
                                                         CommandParameter="{Binding Name}"
                                                         Classes="Success"
-                                                        FontSize="{DynamicResource FontSizeSmall}" Padding="8,2"
+                                                        FontSize="{DynamicResource FontSizeSmall}"
                                                         ToolTip.Tip="{DynamicResource AppsCopyPublicKeyTooltip}">
                                                     <StackPanel Orientation="Horizontal" Spacing="4">
                                                         <PathIcon Data="{StaticResource CopyRegular}" 
@@ -76,7 +76,7 @@
                                                 <Button Command="{Binding $parent[UserControl].((vm:AppsViewModel)DataContext).OpenKeyFolderCommand}"
                                                         CommandParameter="{Binding Name}"
                                                         Classes="Primary"
-                                                        FontSize="{DynamicResource FontSizeSmall}" Padding="8,2"
+                                                        FontSize="{DynamicResource FontSizeSmall}"
                                                         ToolTip.Tip="{DynamicResource AppsOpenKeysTooltip}">
                                                     <StackPanel Orientation="Horizontal" Spacing="4">
                                                         <PathIcon Data="{StaticResource FolderRegular}" 
@@ -86,10 +86,12 @@
                                                 </Button>
                                                 <Button Command="{Binding $parent[UserControl].((vm:AppsViewModel)DataContext).DeleteAppCommand}"
                                                         CommandParameter="{Binding Name}"
-                                                        Classes="Danger IconOnly"
-                                                        ToolTip.Tip="{DynamicResource CommonDelete}"
-                                                        FontSize="{DynamicResource FontSizeSmall}" Padding="8,2">
-                                                    <PathIcon Data="{StaticResource DeleteRegular}"/>
+                                                        Classes="Danger"
+                                                        FontSize="{DynamicResource FontSizeSmall}">
+                                                    <StackPanel Orientation="Horizontal" Spacing="4">
+                                                        <PathIcon Data="{StaticResource DeleteRegular}" Width="12" Height="12"/>
+                                                        <TextBlock Text="{DynamicResource CommonDelete}" VerticalAlignment="Center"/>
+                                                    </StackPanel>
                                                 </Button>
                                             </StackPanel>
                                         </Grid>

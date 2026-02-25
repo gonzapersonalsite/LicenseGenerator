@@ -5,6 +5,7 @@ public interface ISettingsService
     string AppTheme { get; set; }
     double FontSizeScaling { get; set; }
     string CurrentLanguage { get; set; }
+    bool ShowGreeting { get; set; }
     void Save();
     void Load();
     void ResetToDefaults();

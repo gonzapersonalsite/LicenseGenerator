@@ -52,7 +52,7 @@
     "LangSpanish": "Español",
     "LangEnglish": "Inglés",
     "LangGerman": "Alemán",
-    "LangPortuguese": "Portugués",
+    "LangPortuguese": "Português",
     "LangChinese": "Chino",
     "SettingsResetBtn": "Restablecer Ajustes",
     "SettingsResetConfirmTitle": "¿Restablecer Ajustes?",
@@ -134,5 +134,14 @@
     "Notification.ShortcutCreated": "Acceso directo creado en el escritorio.",
     "Notification.ShortcutError": "Error al crear el acceso directo.",
     "SettingsOpenLogsBtn": "Abrir Carpeta de Logs",
-    "SettingsOpenLogsTooltip": "Abrir la carpeta donde se guardan los registros técnicos"
+    "SettingsOpenLogsTooltip": "Abrir la carpeta donde se guardan los registros técnicos",
+    "Greeting.Morning": "¡Buenos días!",
+    "Greeting.MorningMsg": "Bienvenido de nuevo. Esperamos que tengas una jornada productiva gestionando tus licencias.",
+    "Greeting.Afternoon": "¡Buenas tardes!",
+    "Greeting.AfternoonMsg": "Esperamos que estés teniendo un gran día. Tus aplicaciones están listas para seguir trabajando.",
+    "Greeting.Evening": "¡Buenas noches!",
+    "Greeting.EveningMsg": "Un gran día de trabajo está terminando. Aquí tienes todo en orden para mañana.",
+    "Greeting.Night": "¡Feliz madrugada!",
+    "Greeting.NightMsg": "Parece que hoy toca trasnochar. No te olvides de descansar un poco.",
+    "SettingsShowGreeting": "Mostrar saludo inicial"
 }

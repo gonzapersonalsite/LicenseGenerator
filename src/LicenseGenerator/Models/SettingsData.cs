@@ -16,4 +16,7 @@ public class SettingsData
 
     [JsonPropertyName("CurrentLanguage")]
     public string CurrentLanguage { get; set; } = string.Empty;
+
+    [JsonPropertyName("ShowGreeting")]
+    public bool ShowGreeting { get; set; } = true;
 }

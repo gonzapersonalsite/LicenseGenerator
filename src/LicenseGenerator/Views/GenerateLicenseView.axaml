@@ -134,8 +134,7 @@
 
                         <Button Command="{Binding CopyToClipboardCommand}" 
                                 HorizontalAlignment="Right"
-                                Classes="Success"
-                                Padding="15,8">
+                                 Classes="Success">
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <PathIcon Data="{StaticResource CopyRegular}" 
                                           Width="14" Height="14"/>

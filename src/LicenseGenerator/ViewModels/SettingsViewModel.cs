@@ -45,6 +45,9 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isImportConfirmOpen;
 
+    [ObservableProperty]
+    private bool _isGreetingEnabled;
+
     public ObservableCollection<SettingsOption<string>> Themes { get; } = new();
     public ObservableCollection<SettingsOption<double>> FontSizes { get; } = new();
     public ObservableCollection<SettingsOption<string>> Languages { get; } = new();
@@ -106,6 +109,15 @@ public partial class SettingsViewModel : ViewModelBase
         
         // Match the language from service (which already handled system/saved logic)
         SelectedLanguage = Languages.FirstOrDefault(l => l.Value == _languageService.CurrentLanguage) ?? Languages.First();
+        IsGreetingEnabled = _settingsService.ShowGreeting;
+    }
+
+    partial void OnIsGreetingEnabledChanged(bool value)
+    {
+        if (_settingsService.ShowGreeting != value)
+        {
+            _settingsService.ShowGreeting = value;
+        }
     }
 
     partial void OnSelectedThemeChanged(SettingsOption<string> value)

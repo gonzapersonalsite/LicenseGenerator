@@ -12,6 +12,7 @@ public class SettingsService : ISettingsService
     private string _appTheme = "System"; // Default to System
     private double _fontSizeScaling = 1.0;
     private string _currentLanguage = string.Empty; // Empty means "not set, use system"
+    private bool _showGreeting = true;
 
     public string AppTheme
     {
@@ -43,6 +44,16 @@ public class SettingsService : ISettingsService
         }
     }
 
+    public bool ShowGreeting
+    {
+        get => _showGreeting;
+        set
+        {
+            _showGreeting = value;
+            Save();
+        }
+    }
+
     public SettingsService(ILoggingService loggingService)
     {
         _loggingService = loggingService;
@@ -63,7 +74,8 @@ public class SettingsService : ISettingsService
             {
                 AppTheme = AppTheme,
                 FontSizeScaling = FontSizeScaling,
-                CurrentLanguage = CurrentLanguage
+                CurrentLanguage = CurrentLanguage,
+                ShowGreeting = ShowGreeting
             };
             var json = JsonSerializer.Serialize(data, options);
             File.WriteAllText(_settingsFilePath, json);
@@ -90,7 +102,8 @@ public class SettingsService : ISettingsService
                     _appTheme = data.AppTheme ?? "Dark";
                     _fontSizeScaling = data.FontSizeScaling;
                     _currentLanguage = data.CurrentLanguage ?? string.Empty;
-                    _loggingService.LogInfo($"Settings loaded from {_settingsFilePath}. Language: '{_currentLanguage}'");
+                    _showGreeting = data.ShowGreeting;
+                    _loggingService.LogInfo($"Settings loaded from {_settingsFilePath}. Language: '{_currentLanguage}', Greeting: {_showGreeting}");
                 }
             }
             else
@@ -109,6 +122,7 @@ public class SettingsService : ISettingsService
         _appTheme = "System";
         _fontSizeScaling = 1.0;
         _currentLanguage = string.Empty;
+        _showGreeting = true;
         Save();
     }
 }
