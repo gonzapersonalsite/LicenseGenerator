@@ -9,6 +9,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 
 namespace LicenseGenerator.ViewModels;
 
@@ -25,7 +27,7 @@ public partial class AppsViewModel : PaginatedViewModelBase
     private readonly ILanguageService _languageService;
     private readonly INotificationService _notificationService;
     private readonly ILoggingService _loggingService;
-    private List<AppItemInfo> _allApps = new();
+    private List<AppItemInfo>_allApps = new();
 
     [ObservableProperty]
     private string _newAppId = string.Empty;
@@ -214,6 +216,35 @@ public partial class AppsViewModel : PaginatedViewModelBase
     }
 
     [RelayCommand]
+    private async Task CopyPublicKey(string appId)
+    {
+        try
+        {
+            string publicKey = _licenseService.GetPublicKey(appId);
+            if (string.IsNullOrEmpty(publicKey))
+            {
+                _notificationService.ShowError(_languageService["CommonError"], _languageService["Notification.OpenFolderError"]);
+                return;
+            }
+
+            if (Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop && desktop.MainWindow != null)
+            {
+                var clipboard = Avalonia.Controls.TopLevel.GetTopLevel(desktop.MainWindow)?.Clipboard;
+                if (clipboard != null)
+                {
+                    await clipboard.SetTextAsync(publicKey);
+                    _notificationService.ShowSuccess(_languageService["CommonSuccess"], _languageService["Notification.CopySuccess"]);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _loggingService.LogError($"Error copying public key for app {appId}", ex);
+            _notificationService.ShowError(_languageService["CommonError"], _languageService["Notification.OpenFolderError"]);
+        }
+    }
+
+    [RelayCommand]
     private void OpenKeyFolder(string appId)
     {
         try
@@ -230,9 +261,6 @@ public partial class AppsViewModel : PaginatedViewModelBase
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                // For MSIX compatibility, it's better to let ShellExecute handle the path.
-                // However, we pass the path resolved to avoid the "Location not available" error
-                // that happens when explorer.exe (external) tries to access the virtualized path.
                 string resolvedPath = ResolveActualPath(keysDir);
                 _loggingService.LogDebug($"Opening resolved path: {resolvedPath}");
 

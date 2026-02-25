@@ -14,5 +14,6 @@ public interface ILicenseGeneratorService
     bool DeleteLicense(string fileName);
     int GetLicenseCountForApp(string appId);
     string GetAppKeysDirectory(string appId);
+    string GetPublicKey(string appId);
     (int AppsCount, int LicensesCount) GetStats();
 }

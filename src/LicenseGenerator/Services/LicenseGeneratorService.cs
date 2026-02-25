@@ -173,6 +173,16 @@ public class LicenseGeneratorService : ILicenseGeneratorService
         return Path.Combine(_keysDirectory, appId);
     }
 
+    public string GetPublicKey(string appId)
+    {
+        string publicKeyPath = Path.Combine(_keysDirectory, appId, "public.pem");
+        if (File.Exists(publicKeyPath))
+        {
+            return File.ReadAllText(publicKeyPath);
+        }
+        return string.Empty;
+    }
+
     public (int AppsCount, int LicensesCount) GetStats()
     {
         int apps = GetAvailableApps().Count();

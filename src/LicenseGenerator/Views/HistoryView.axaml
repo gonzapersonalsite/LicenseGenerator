@@ -65,16 +65,23 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <Button Content="{DynamicResource CommonCopy}" 
-                                             Command="{Binding $parent[UserControl].((vm:HistoryViewModel)DataContext).CopyLicenseCommand}"
+                                    <Button Command="{Binding $parent[UserControl].((vm:HistoryViewModel)DataContext).CopyLicenseCommand}"
                                              CommandParameter="{Binding}"
                                              Classes="Success"
-                                             FontSize="{DynamicResource FontSizeSmall}" Padding="8,2"/>
-                                    <Button Content="{DynamicResource CommonDelete}" 
-                                             Command="{Binding $parent[UserControl].((vm:HistoryViewModel)DataContext).DeleteLicenseCommand}"
+                                             ToolTip.Tip="{DynamicResource HistoryCopyTooltip}"
+                                             FontSize="{DynamicResource FontSizeSmall}" Padding="8,2">
+                                        <StackPanel Orientation="Horizontal" Spacing="4">
+                                            <PathIcon Data="{StaticResource CopyRegular}" Width="12" Height="12"/>
+                                            <TextBlock Text="{DynamicResource CommonCopy}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Command="{Binding $parent[UserControl].((vm:HistoryViewModel)DataContext).DeleteLicenseCommand}"
                                              CommandParameter="{Binding}"
-                                             Classes="Danger"
-                                             FontSize="{DynamicResource FontSizeSmall}" Padding="8,2"/>
+                                             Classes="Danger IconOnly"
+                                             ToolTip.Tip="{DynamicResource CommonDelete}"
+                                             FontSize="{DynamicResource FontSizeSmall}" Padding="8,2">
+                                        <PathIcon Data="{StaticResource DeleteRegular}"/>
+                                    </Button>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

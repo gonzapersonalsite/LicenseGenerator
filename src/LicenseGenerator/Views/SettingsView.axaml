@@ -25,7 +25,7 @@
                         Padding="20">
                     <StackPanel Spacing="15">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Data="M21 12.35c0 5.31-4.32 9.62-9.62 9.62-5.3 0-9.62-4.31-9.62-9.62h1.54C3.3 17.14 7.21 21.05 12 21.05s8.7-3.91 8.7-8.7c0-2.43-.99-4.62-2.58-6.19l1.09-1.09C20.84 6.78 22 9.4 22 12.35zM12.35 1c-5.31 0-9.62 4.31-9.62 9.62h1.54c0-4.64 3.77-8.41 8.41-8.41 2.37 0 4.51.98 6.05 2.56l1.09-1.09C18.17 2.15 15.39 1 12.35 1z" 
+                            <PathIcon Data="{StaticResource AppearanceRegular}" 
                                       Width="20" Height="20" Opacity="0.7"/>
                             <TextBlock Text="{DynamicResource SettingsAppearance}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="SemiBold" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -109,7 +109,7 @@
                         Padding="20">
                     <StackPanel Spacing="15">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Data="M21 16.5C21 16.88 20.79 17.21 20.47 17.38L12.57 21.82C12.41 21.94 12.21 22 12 22C11.79 22 11.59 21.94 11.43 21.82L3.53 17.38C3.21 17.21 3 16.88 3 16.5V7.5C3 7.12 3.21 6.79 3.53 6.62L11.43 2.18C11.59 2.06 11.79 2 12 2C12.21 2 12.41 2.06 12.57 2.18L20.47 6.62C20.79 6.79 21 7.12 21 7.5V16.5Z" 
+                            <PathIcon Data="{StaticResource PackageRegular}" 
                                       Width="20" Height="20" Opacity="0.7"/>
                             <TextBlock Text="{DynamicResource SettingsSystemIntegration}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="SemiBold" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -123,10 +123,15 @@
                         <Grid ColumnDefinitions="*, Auto">
                             <TextBlock Text="{DynamicResource SettingsShortcutBtn}" VerticalAlignment="Center"/>
                             <Button Grid.Column="1" 
-                                    Content="{DynamicResource SettingsShortcutBtn}" 
                                     Command="{Binding CreateShortcutCommand}"
+                                    Classes="Success"
                                     MinWidth="150"
-                                    HorizontalContentAlignment="Center"/>
+                                    HorizontalContentAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <PathIcon Data="{StaticResource CheckRegular}" Width="14" Height="14"/>
+                                    <TextBlock Text="{DynamicResource SettingsShortcutBtn}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
                         </Grid>
                     </StackPanel>
                 </Border>
@@ -151,7 +156,7 @@
                                 Padding="16,8"
                                 FontSize="{DynamicResource FontSizeSmall}">
                             <StackPanel Orientation="Horizontal" Spacing="6">
-                                <PathIcon Data="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"
+                                <PathIcon Data="{StaticResource HomeRegular}"
                                           Width="14" Height="14"/>
                                 <TextBlock Text="{DynamicResource Docs.RepositoryButton}" VerticalAlignment="Center"/>
                             </StackPanel>
@@ -167,7 +172,7 @@
                         Padding="20">
                     <StackPanel Spacing="15">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" 
+                            <PathIcon Data="{StaticResource InfoRegular}" 
                                       Width="20" Height="20" Opacity="0.7"/>
                             <TextBlock Text="{DynamicResource Backup.Title}" FontSize="{DynamicResource FontSizeLarge}" FontWeight="SemiBold" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -177,28 +182,43 @@
                         <Grid ColumnDefinitions="*, Auto">
                             <TextBlock Text="{DynamicResource Backup.Export}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,10,0"/>
                             <Button Grid.Column="1" 
-                                    Content="{DynamicResource CommonExport}" 
                                     Command="{Binding ExportDataCommand}"
+                                    Classes="Primary"
                                     MinWidth="150"
-                                    HorizontalContentAlignment="Center"/>
+                                    HorizontalContentAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <PathIcon Data="{StaticResource ExportRegular}" Width="14" Height="14"/>
+                                    <TextBlock Text="{DynamicResource CommonExport}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
                         </Grid>
 
                         <Grid ColumnDefinitions="*, Auto">
                             <TextBlock Text="{DynamicResource Backup.Import}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,10,0"/>
                             <Button Grid.Column="1" 
-                                    Content="{DynamicResource CommonImport}" 
                                     Command="{Binding ShowImportConfirmCommand}"
+                                    Classes="Danger"
                                     MinWidth="150"
-                                    HorizontalContentAlignment="Center"/>
+                                    HorizontalContentAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <PathIcon Data="{StaticResource ImportRegular}" Width="14" Height="14"/>
+                                    <TextBlock Text="{DynamicResource CommonImport}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
                         </Grid>
 
                         <Grid ColumnDefinitions="*, Auto">
                             <TextBlock Text="{DynamicResource SettingsOpenLogsTooltip}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,10,0" Opacity="0.7" FontSize="{DynamicResource FontSizeSmall}"/>
                             <Button Grid.Column="1" 
-                                    Content="{DynamicResource SettingsOpenLogsBtn}" 
                                     Command="{Binding OpenLogsFolderCommand}"
+                                    Classes="Primary"
                                     MinWidth="150"
-                                    HorizontalContentAlignment="Center"/>
+                                    HorizontalContentAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <PathIcon Data="{StaticResource FolderRegular}" Width="14" Height="14"/>
+                                    <TextBlock Text="{DynamicResource SettingsOpenLogsBtn}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
                         </Grid>
                     </StackPanel>
                 </Border>
@@ -211,7 +231,7 @@
                         Padding="20">
                     <StackPanel Spacing="12">
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
+                            <PathIcon Data="{StaticResource HeartRegular}" 
                                       Width="22" Height="22" 
                                       Foreground="{DynamicResource ColorPrimary}"/>
                             <TextBlock Text="{DynamicResource Support.Title}" 
@@ -234,7 +254,7 @@
                                 FontWeight="SemiBold"
                                 FontSize="{DynamicResource FontSizeMedium}">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <PathIcon Data="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
+                                <PathIcon Data="{StaticResource HeartRegular}" 
                                           Width="18" Height="18"/>
                                 <TextBlock Text="{DynamicResource Support.Button}" VerticalAlignment="Center"/>
                             </StackPanel>
@@ -254,9 +274,11 @@
                             <TextBlock Text="{DynamicResource SettingsResetInfo}" FontSize="{DynamicResource FontSizeSmall}" Opacity="0.7" TextWrapping="Wrap" Margin="0,0,20,0"/>
                         </StackPanel>
                         <Button Grid.Column="1" 
-                                Content="{DynamicResource SettingsResetBtn}" 
                                 Command="{Binding ShowResetConfirmCommand}"
-                                Classes="Danger"/>
+                                ToolTip.Tip="{DynamicResource SettingsResetBtn}"
+                                Classes="Danger IconOnly">
+                            <PathIcon Data="{StaticResource DeleteRegular}"/>
+                        </Button>
                     </Grid>
                 </Border>
             </StackPanel>
