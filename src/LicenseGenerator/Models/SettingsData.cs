@@ -19,4 +19,17 @@ public class SettingsData
 
     [JsonPropertyName("ShowGreeting")]
     public bool ShowGreeting { get; set; } = true;
+
+    // Rotating greeting indices per time slot
+    [JsonPropertyName("LastGreetingIndexMorning")]
+    public int LastGreetingIndexMorning { get; set; } = -1;
+
+    [JsonPropertyName("LastGreetingIndexAfternoon")]
+    public int LastGreetingIndexAfternoon { get; set; } = -1;
+
+    [JsonPropertyName("LastGreetingIndexEvening")]
+    public int LastGreetingIndexEvening { get; set; } = -1;
+
+    [JsonPropertyName("LastGreetingIndexNight")]
+    public int LastGreetingIndexNight { get; set; } = -1;
 }

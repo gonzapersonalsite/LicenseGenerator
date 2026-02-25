@@ -51,7 +51,8 @@ public class GreetingService : IGreetingService
             }
 
             var title = _languageService[greetingKey];
-            var message = _languageService[greetingKey + "Msg"];
+            var slot = greetingKey.Substring(greetingKey.LastIndexOf('.') + 1);
+            var message = GetRotatingMessage(greetingKey + "Msg", slot);
             
             // Explicitly set duration to 6 seconds as requested (longer than default)
             _notificationService.Show(title, message, NotificationType.Info, 12);
@@ -61,5 +62,57 @@ public class GreetingService : IGreetingService
             // Silently fail to ensure app stability as requested
             _loggingService.LogError("Error showing smart greeting", ex);
         }
+    }
+
+    private string GetRotatingMessage(string baseMessageKey, string slot)
+    {
+        var available = new System.Collections.Generic.List<string>();
+
+        var baseValue = _languageService[baseMessageKey];
+        if (!IsMissing(baseValue, baseMessageKey))
+        {
+            available.Add(baseValue);
+        }
+
+        for (int i = 1; i <= 20; i++)
+        {
+            var key = baseMessageKey + "." + i;
+            var value = _languageService[key];
+            if (!IsMissing(value, key))
+            {
+                available.Add(value);
+            }
+        }
+
+        if (available.Count == 0)
+        {
+            return $"[{baseMessageKey}]";
+        }
+
+        int lastIndex = slot switch
+        {
+            "Morning" => _settingsService.LastGreetingIndexMorning,
+            "Afternoon" => _settingsService.LastGreetingIndexAfternoon,
+            "Evening" => _settingsService.LastGreetingIndexEvening,
+            "Night" => _settingsService.LastGreetingIndexNight,
+            _ => -1
+        };
+
+        var nextIndex = (lastIndex + 1) % available.Count;
+
+        switch (slot)
+        {
+            case "Morning": _settingsService.LastGreetingIndexMorning = nextIndex; break;
+            case "Afternoon": _settingsService.LastGreetingIndexAfternoon = nextIndex; break;
+            case "Evening": _settingsService.LastGreetingIndexEvening = nextIndex; break;
+            case "Night": _settingsService.LastGreetingIndexNight = nextIndex; break;
+        }
+
+        return available[nextIndex];
+    }
+
+    private static bool IsMissing(string resolvedValue, string key)
+    {
+        return string.Equals(resolvedValue, $"[{key}]", StringComparison.Ordinal);
     }
 }

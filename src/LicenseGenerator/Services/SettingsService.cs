@@ -13,6 +13,10 @@ public class SettingsService : ISettingsService
     private double _fontSizeScaling = 1.0;
     private string _currentLanguage = string.Empty; // Empty means "not set, use system"
     private bool _showGreeting = true;
+    private int _lastGreetingIndexMorning = -1;
+    private int _lastGreetingIndexAfternoon = -1;
+    private int _lastGreetingIndexEvening = -1;
+    private int _lastGreetingIndexNight = -1;
 
     public string AppTheme
     {
@@ -54,6 +58,46 @@ public class SettingsService : ISettingsService
         }
     }
 
+    public int LastGreetingIndexMorning
+    {
+        get => _lastGreetingIndexMorning;
+        set
+        {
+            _lastGreetingIndexMorning = value;
+            Save();
+        }
+    }
+
+    public int LastGreetingIndexAfternoon
+    {
+        get => _lastGreetingIndexAfternoon;
+        set
+        {
+            _lastGreetingIndexAfternoon = value;
+            Save();
+        }
+    }
+
+    public int LastGreetingIndexEvening
+    {
+        get => _lastGreetingIndexEvening;
+        set
+        {
+            _lastGreetingIndexEvening = value;
+            Save();
+        }
+    }
+
+    public int LastGreetingIndexNight
+    {
+        get => _lastGreetingIndexNight;
+        set
+        {
+            _lastGreetingIndexNight = value;
+            Save();
+        }
+    }
+
     public SettingsService(ILoggingService loggingService)
     {
         _loggingService = loggingService;
@@ -75,7 +119,11 @@ public class SettingsService : ISettingsService
                 AppTheme = AppTheme,
                 FontSizeScaling = FontSizeScaling,
                 CurrentLanguage = CurrentLanguage,
-                ShowGreeting = ShowGreeting
+                ShowGreeting = ShowGreeting,
+                LastGreetingIndexMorning = LastGreetingIndexMorning,
+                LastGreetingIndexAfternoon = LastGreetingIndexAfternoon,
+                LastGreetingIndexEvening = LastGreetingIndexEvening,
+                LastGreetingIndexNight = LastGreetingIndexNight
             };
             var json = JsonSerializer.Serialize(data, options);
             File.WriteAllText(_settingsFilePath, json);
@@ -103,6 +151,10 @@ public class SettingsService : ISettingsService
                     _fontSizeScaling = data.FontSizeScaling;
                     _currentLanguage = data.CurrentLanguage ?? string.Empty;
                     _showGreeting = data.ShowGreeting;
+                    _lastGreetingIndexMorning = data.LastGreetingIndexMorning;
+                    _lastGreetingIndexAfternoon = data.LastGreetingIndexAfternoon;
+                    _lastGreetingIndexEvening = data.LastGreetingIndexEvening;
+                    _lastGreetingIndexNight = data.LastGreetingIndexNight;
                     _loggingService.LogInfo($"Settings loaded from {_settingsFilePath}. Language: '{_currentLanguage}', Greeting: {_showGreeting}");
                 }
             }
@@ -123,6 +175,10 @@ public class SettingsService : ISettingsService
         _fontSizeScaling = 1.0;
         _currentLanguage = string.Empty;
         _showGreeting = true;
+        _lastGreetingIndexMorning = -1;
+        _lastGreetingIndexAfternoon = -1;
+        _lastGreetingIndexEvening = -1;
+        _lastGreetingIndexNight = -1;
         Save();
     }
 }
